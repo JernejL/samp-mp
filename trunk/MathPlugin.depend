@@ -1,0 +1,67 @@
+# depslib dependency file v1.0
+1262044904 source:c:\documents and settings\jernej\desktop\psrvr\sdk\amx\getch.c
+	<stdio.h>
+	<string.h>
+	<termios.h>
+	<unistd.h>
+	<sys/socket.h>
+	<sys/types.h>
+	<sys/time.h>
+	"getch.h"
+
+1262044904 c:\documents and settings\jernej\desktop\psrvr\sdk\amx\getch.h
+
+1262044904 source:c:\documents and settings\jernej\desktop\psrvr\sdk\amxplugin.cpp
+	"plugin.h"
+
+1262044904 c:\documents and settings\jernej\desktop\psrvr\sdk\plugin.h
+	"plugincommon.h"
+	"amx/amx.h"
+
+1262044904 c:\documents and settings\jernej\desktop\psrvr\sdk\plugincommon.h
+
+1273276214 c:\documents and settings\jernej\desktop\psrvr\sdk\amx\amx.h
+	"sclinux.h"
+	<stdint.h>
+	<inttypes.h>
+	<stdint.h>
+	<ppc/types.h>
+	<inttypes.h>
+	<alloca.h>
+
+1262044904 c:\documents and settings\jernej\desktop\psrvr\sdk\amx\sclinux.h
+	"getch.h"
+	<stdlib.h>
+
+1311202598 source:c:\documents and settings\jernej\desktop\psrvr\pmodules\mathplugin\main.cpp
+	"main.h"
+	"Invoke.h"
+	<math.h>
+
+1311202602 c:\documents and settings\jernej\desktop\psrvr\pmodules\mathplugin\main.h
+	<windows.h>
+	<algorithm>
+	<bitset>
+	<limits>
+	<list>
+	<map>
+	<math.h>
+	<set>
+	<stdarg.h>
+	<string>
+	<string.h>
+	<vector>
+	<boost/intrusive_ptr.hpp>
+	<boost/unordered_map.hpp>
+	<boost/unordered_set.hpp>
+	"SDK/amx/amx.h"
+	"SDK/plugincommon.h"
+
+1311167026 c:\documents and settings\jernej\desktop\psrvr\pmodules\mathplugin\invoke.h
+
+1293724576 c:\documents and settings\jernej\desktop\psrvr\pmodules\mathplugin\natives.h
+
+1311119938 source:c:\documents and settings\jernej\desktop\psrvr\pmodules\mathplugin\invoke.cpp
+	"main.h"
+	"Invoke.h"
+
