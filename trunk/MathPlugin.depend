@@ -1,0 +1,176 @@
+# depslib dependency file v1.0
+1311337336 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\MathPlugin.cpp
+	"MathPlugin.h"
+
+1311337320 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\MathPlugin.h
+	"samp/samp.h"
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\samp.h
+	<string>
+	"eventhandler.h"
+	"logprintf.h"
+	"objects.h"
+	"players.h"
+	"vehicles.h"
+	"wrapper.h"
+	"plugin/plugin.h"
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\eventhandler.h
+	<string>
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\logprintf.h
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\objects.h
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\players.h
+	<string>
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\vehicles.h
+	<string>
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\wrapper.h
+	<map>
+	<string>
+	"plugin/amx/amx.h"
+
+1311336944 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\plugin\amx\amx.h
+	<sclinux.h>
+	<stdint.h>
+	<inttypes.h>
+	<stdint.h>
+	<ppc/types.h>
+	<inttypes.h>
+	<stdint.h>
+	<inttypes.h>
+	<alloca.h>
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\plugin\plugin.h
+	"plugincommon.h"
+	"amx/amx.h"
+
+1311526044 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\plugin\plugincommon.h
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\callbacks.cpp
+	<string>
+	<malloc.h>
+	"callbacks.h"
+	"eventhandler.h"
+	"wrapper.h"
+	"plugin/amx/amx.h"
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\callbacks.h
+	"plugin/amx/amx.h"
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\eventhandler.cpp
+	"eventhandler.h"
+	"logprintf.h"
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\fakeamx.cpp
+	<limits>
+	"fakeamx.h"
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\fakeamx.h
+	"plugin/amx/amx.h"
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\jump.cpp
+	<cstring>
+	<windows.h>
+	<stdint.h>
+	<unistd.h>
+	<sys/mman.h>
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\logprintf.cpp
+	"logprintf.h"
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\objects.cpp
+	"fakeamx.h"
+	"wrapper.h"
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\players.cpp
+	<string>
+	"fakeamx.h"
+	"samp.h"
+	"wrapper.h"
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\plugin\amxplugin.cpp
+	"plugin.h"
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\samp.cpp
+	<string>
+	"fakeamx.h"
+	"wrapper.h"
+
+1311329146 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\vehicles.cpp
+	"fakeamx.h"
+	"wrapper.h"
+
+1311549004 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\wrapper.cpp
+	<cstring>
+	<string>
+	"callbacks.h"
+	"jump.h"
+	"logprintf.h"
+	"wrapper.h"
+	"plugin/plugin.h"
+
+1311329146 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\samp\jump.h
+
+1311548624 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\mathplugin.cpp
+	"MathPlugin.h"
+	<math.h>
+
+1311549084 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\mathplugin.h
+	"samp/samp.h"
+
+1311523202 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\core.cpp
+	"MathPlugin.h"
+	<math.h>
+	"core.h"
+
+1311523196 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\samp-gamemode-sdk\core.h
+
+1262044904 source:c:\documents and settings\jernej\desktop\psrvr\sdk\amxplugin.cpp
+	"plugin.h"
+
+1262044904 c:\documents and settings\jernej\desktop\psrvr\sdk\plugin.h
+	"plugincommon.h"
+	"amx/amx.h"
+
+1262044904 c:\documents and settings\jernej\desktop\psrvr\sdk\plugincommon.h
+
+1273276214 c:\documents and settings\jernej\desktop\psrvr\sdk\amx\amx.h
+	"sclinux.h"
+	<stdint.h>
+	<inttypes.h>
+	<stdint.h>
+	<ppc/types.h>
+	<inttypes.h>
+	<alloca.h>
+
+1262044904 c:\documents and settings\jernej\desktop\psrvr\sdk\amx\sclinux.h
+	"getch.h"
+	<stdlib.h>
+
+1262044904 c:\documents and settings\jernej\desktop\psrvr\sdk\amx\getch.h
+
+1262044904 source:c:\documents and settings\jernej\desktop\psrvr\sdk\getch.c
+	<stdio.h>
+	<string.h>
+	<termios.h>
+	<unistd.h>
+	<sys/socket.h>
+	<sys/types.h>
+	<sys/time.h>
+	"getch.h"
+
+1281564836 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\sdk\amx\amx.h
+	<sclinux.h>
+	<stdint.h>
+	<inttypes.h>
+	<stdint.h>
+	<ppc/types.h>
+	<inttypes.h>
+	<alloca.h>
+
+1281564834 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\sdk\plugincommon.h
+
