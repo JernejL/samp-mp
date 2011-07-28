@@ -1,8 +1,16 @@
 #include "MathPlugin.h"
 
 #include <math.h>
+#include <sampgdk/logprintf.h>
+#include <sampgdk/game/samp.h>
+#include <sampgdk/game/players.h>
+#include <sampgdk/plugin/plugin.h>
+#include <sampgdk/wrapper/wrapper.h>
+#include <sampgdk/plugin/plugin.h>
 
-using namespace samp;
+#include <sampgdk\game\vehicles.h>
+
+using namespace sampgdk;
 
     int curridx[MAX_PLAYERS]; // at which point is the cycle?
     psnapshot datacache[MAX_PLAYERS][MAX_SNAPSHOTS];

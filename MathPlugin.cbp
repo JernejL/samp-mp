@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug Win32">
-				<Option output="MathPlugin" prefix_auto="1" extension_auto="1" />
+				<Option output="..\..\..\..\MathPlugin" prefix_auto="1" extension_auto="1" />
 				<Option object_output="Debug Win32" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -36,13 +36,17 @@
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
+					<Add option="-O2" />
+					<Add option="-W" />
 					<Add option="-DWIN32" />
 					<Add option="-DNDEBUG" />
 					<Add option="-D_WINDOWS" />
 					<Add option="-D_USRDLL" />
 					<Add option="-DMathPlugin_EXPORTS" />
-					<Add option="-W" />
-					<Add option="-O2" />
+					<Add directory="..\..\..\sampgdk" />
+					<Add directory="..\..\..\..\zeex" />
+					<Add directory="..\..\include" />
+					<Add directory="..\..\src" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -50,39 +54,34 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="..\..\..\..\SDK\plugincommon.h" />
+		<Compiler>
+			<Add directory="..\..\..\..\zeex" />
+			<Add directory="..\..\..\sampgdk" />
+		</Compiler>
+		<Unit filename="..\..\SDK\amx\amx.h" />
+		<Unit filename="..\..\SDK\amx\getch.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\SDK\amx\getch.h" />
+		<Unit filename="..\..\SDK\amx\sclinux.h" />
+		<Unit filename="..\..\SDK\amxplugin.cpp" />
+		<Unit filename="..\..\SDK\plugin.h" />
+		<Unit filename="..\..\SDK\plugincommon.h" />
 		<Unit filename="MathPlugin.cpp" />
 		<Unit filename="MathPlugin.def" />
 		<Unit filename="MathPlugin.h" />
-		<Unit filename="core.cpp" />
-		<Unit filename="core.h" />
-		<Unit filename="samp\callbacks.cpp" />
-		<Unit filename="samp\callbacks.h" />
-		<Unit filename="samp\eventhandler.cpp" />
-		<Unit filename="samp\eventhandler.h" />
-		<Unit filename="samp\fakeamx.cpp" />
-		<Unit filename="samp\fakeamx.h" />
-		<Unit filename="samp\jump.cpp" />
-		<Unit filename="samp\jump.h" />
-		<Unit filename="samp\logprintf.cpp" />
-		<Unit filename="samp\logprintf.h" />
-		<Unit filename="samp\objects.cpp" />
-		<Unit filename="samp\objects.h" />
-		<Unit filename="samp\players.cpp" />
-		<Unit filename="samp\players.h" />
-		<Unit filename="samp\plugin\amx\amx.h" />
-		<Unit filename="samp\plugin\amx\getch.h" />
-		<Unit filename="samp\plugin\amx\osdefs.h" />
-		<Unit filename="samp\plugin\amx\sclinux.h" />
-		<Unit filename="samp\plugin\amxplugin.cpp" />
-		<Unit filename="samp\plugin\plugin.h" />
-		<Unit filename="samp\plugin\plugincommon.h" />
-		<Unit filename="samp\samp.cpp" />
-		<Unit filename="samp\samp.h" />
-		<Unit filename="samp\vehicles.cpp" />
-		<Unit filename="samp\vehicles.h" />
-		<Unit filename="samp\wrapper.cpp" />
-		<Unit filename="samp\wrapper.h" />
+		<Unit filename="..\..\src\game\fakeamx.cpp" />
+		<Unit filename="..\..\src\game\fakeamx.h" />
+		<Unit filename="..\..\src\game\objects.cpp" />
+		<Unit filename="..\..\src\game\players.cpp" />
+		<Unit filename="..\..\src\game\samp.cpp" />
+		<Unit filename="..\..\src\game\vehicles.cpp" />
+		<Unit filename="..\..\src\logprintf.cpp" />
+		<Unit filename="..\..\src\wrapper\callbacks.cpp" />
+		<Unit filename="..\..\src\wrapper\eventhandler.cpp" />
+		<Unit filename="..\..\src\wrapper\jump.cpp" />
+		<Unit filename="..\..\src\wrapper\jump.h" />
+		<Unit filename="..\..\src\wrapper\wrapper.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
