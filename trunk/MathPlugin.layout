@@ -1,28 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release Win32" />
-	<File name="MathPlugin.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="0" topLine="0" />
-	</File>
-	<File name="MathPlugin.def" open="1" top="1" tabpos="3">
-		<Cursor position="25" topLine="0" />
-	</File>
-	<File name="MathPlugin.h" open="1" top="0" tabpos="2">
-		<Cursor position="87" topLine="0" />
-	</File>
-	<File name="core.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="65" topLine="0" />
-	</File>
-	<File name="samp\plugin\amx\amx.h" open="1" top="0" tabpos="5">
-		<Cursor position="6871" topLine="200" />
-	</File>
-	<File name="samp\plugin\amxplugin.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="8655" topLine="299" />
-	</File>
-	<File name="samp\plugin\plugincommon.h" open="1" top="0" tabpos="4">
-		<Cursor position="533" topLine="10" />
-	</File>
-	<File name="samp\samp.h" open="0" top="0" tabpos="0">
-		<Cursor position="1024" topLine="13" />
+	<File name="MathPlugin.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="45" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>
