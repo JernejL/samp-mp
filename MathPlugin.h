@@ -62,12 +62,15 @@ struct psnapshot {
     SCRIPT_NATIVE nat_MPDistancePointLine(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPGetVehicleUpsideDown(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPDistance(AMX* amx, cell* params);
+    SCRIPT_NATIVE nat_MPVecLength(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_FMPDistance(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPInterpolatePoint(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPFSQRT(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPFNormalize(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPClamp360(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPDotProduct(AMX* amx, cell* params);
-	SCRIPT_NATIVE nat_returnit(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPGetTrailerTowingVehicle(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPVecLength(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_FMPVecLength(AMX* amx, cell* params);
 
 

@@ -36,7 +36,10 @@ using namespace sampgdk;
 		{ "MPFNormalize",				nat_MPFNormalize },
 		{ "MPPLogConnect",				nat_MPPLogConnect },
 		{ "MPGetVehicleUpsideDown",		nat_MPGetVehicleUpsideDown },
-		{ "returnit",					nat_returnit },
+		{ "MPGetTrailerTowingVehicle",	nat_MPGetTrailerTowingVehicle },
+		{ "MPVecLength",				nat_MPVecLength },
+		{ "FMPVecLength",				nat_FMPVecLength },
+
 		{ 0,					    	0 }
 	};
 
@@ -67,6 +70,26 @@ void Normalize(float &vx, float &vy, float &vz) {
 	vz = vz * Length;
 }
 
+int GetTrailerTowingVehicle(int trailerid) {
+
+    if ((trailerid == 0) || (trailerid == INVALID_VEHICLE_ID) || (trailerid > MAX_VEHICLES))
+        return INVALID_PLAYER_ID;
+
+    int i;
+
+    for (i = 0; i < MAX_VEHICLES; i++) {
+
+		if (GetVehicleModel(i) == 0) // invalid vehicle.
+			continue;
+
+        if (GetVehicleTrailer(i) == trailerid)
+			return i;
+
+    }
+
+    return INVALID_VEHICLE_ID; // found no driver.
+
+}
 
 int GetVehicleDriver(int vehicleid) {
 
@@ -104,6 +127,16 @@ SCRIPT_NATIVE nat_MPGetVehicleDriver(AMX* amx, cell* params) {
 	vehicleid = (int)params[1];
 
 	return GetVehicleDriver(vehicleid);
+}
+
+SCRIPT_NATIVE nat_MPGetTrailerTowingVehicle(AMX* amx, cell* params) {
+	int vehicleid;
+
+//    CHECK_PARAM_COUNT(PushString, 1);
+
+	vehicleid = (int)params[1];
+
+	return GetTrailerTowingVehicle(vehicleid);
 }
 
 int GetVehicleDriverCount(int vehicleid) {
@@ -300,6 +333,40 @@ SCRIPT_NATIVE nat_MPDistance(AMX* amx, cell* params) {
 
     float tmpret;
 	tmpret = Distance(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]),    amx_ctof(params[4]), amx_ctof(params[5]), amx_ctof(params[6]));
+
+	return amx_ftoc(tmpret);
+
+}
+
+float VecLength(float fsx, float fsy, float fsz) {
+
+	return sqrt(fsx * fsx + fsy * fsy + fsz * fsz);
+
+}
+
+SCRIPT_NATIVE nat_MPVecLength(AMX* amx, cell* params) {
+
+    //CHECK_PARAM_COUNT(PushString, 3);
+
+    float tmpret;
+	tmpret = VecLength(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]));
+
+	return amx_ftoc(tmpret);
+
+}
+
+float FVecLength(float fsx, float fsy, float fsz) {
+
+	return FastSqrt(fsx * fsx + fsy * fsy + fsz * fsz);
+
+}
+
+SCRIPT_NATIVE nat_FMPVecLength(AMX* amx, cell* params) {
+
+    //CHECK_PARAM_COUNT(PushString, 3);
+
+    float tmpret;
+	tmpret = FVecLength(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]));
 
 	return amx_ftoc(tmpret);
 
@@ -688,16 +755,9 @@ SCRIPT_NATIVE nat_MPGetVehicleUpsideDown(AMX* amx, cell* params) {
 	return amx_ftoc(resz);
 }
 
-SCRIPT_NATIVE nat_returnit(AMX* amx, cell* params) {
-
-    //CHECK_PARAM_COUNT(PushString, 1);
-
-	return params[1];
-}
-
 SCRIPT_NATIVE nat_MPInit(AMX * amx, cell * params)
 {
-	logprintf("*** Math Plugin: todo:remove this.");
+	logprintf("*** Math Plugin: Initialized.");
 	return 1;
 }
 
