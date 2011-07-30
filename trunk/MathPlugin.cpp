@@ -123,7 +123,7 @@ int GetVehicleDriver(int vehicleid) {
 SCRIPT_NATIVE nat_MPGetVehicleDriver(AMX* amx, cell* params) {
 	int vehicleid;
 
-//    CHECK_PARAM_COUNT(PushString, 1);
+    CHECK_PARAM_COUNT(nat_MPGetVehicleDriver, 1);
 
 	vehicleid = (int)params[1];
 
@@ -133,7 +133,7 @@ SCRIPT_NATIVE nat_MPGetVehicleDriver(AMX* amx, cell* params) {
 SCRIPT_NATIVE nat_MPGetTrailerTowingVehicle(AMX* amx, cell* params) {
 	int vehicleid;
 
-//    CHECK_PARAM_COUNT(PushString, 1);
+    CHECK_PARAM_COUNT(nat_MPGetTrailerTowingVehicle, 1);
 
 	vehicleid = (int)params[1];
 
@@ -170,7 +170,7 @@ int GetVehicleDriverCount(int vehicleid) {
 SCRIPT_NATIVE nat_MPGetVehicleDriverCount(AMX* amx, cell* params) {
 	int vehicleid;
 
-//    CHECK_PARAM_COUNT(PushString, 1);
+    CHECK_PARAM_COUNT(nat_MPGetVehicleDriverCount, 1);
 
 	vehicleid = (int)params[1];
 
@@ -187,7 +187,7 @@ void MPCrossProduct(float v1[3], float v2[3], float &resx, float &resy, float &r
 
 SCRIPT_NATIVE nat_MPCrossProduct(AMX* amx, cell* params) {
 
-//    CHECK_PARAM_COUNT(PushString, 9);
+    CHECK_PARAM_COUNT(nat_MPCrossProduct, 9);
 
     float v1[3];
     float v2[3];
@@ -222,7 +222,7 @@ float DotProduct(float AX, float AY, float AZ, float BX, float BY, float BZ) {
 
 SCRIPT_NATIVE nat_MPDotProduct(AMX* amx, cell* params) {
 
-	//CHECK_PARAM_COUNT(PushString, 6);
+	CHECK_PARAM_COUNT(nat_MPDotProduct, 6);
 
 	float ret = DotProduct(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]), amx_ctof(params[4]), amx_ctof(params[5]), amx_ctof(params[6]));
 
@@ -248,7 +248,7 @@ float DistanceCameraTargetToLocation(float CamX, float CamY, float CamZ,   float
 
 SCRIPT_NATIVE nat_MPDistanceCameraTargetToLocation(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 9);
+    CHECK_PARAM_COUNT(nat_MPDistanceCameraTargetToLocation, 9);
 
 	float resdist = DistanceCameraTargetToLocation(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]),   amx_ctof(params[4]), amx_ctof(params[5]), amx_ctof(params[6]),   amx_ctof(params[7]), amx_ctof(params[8]), amx_ctof(params[9]));
 
@@ -330,7 +330,7 @@ float FDistance(float fPos1x, float fPos1y, float fPos1z, float fPos2x, float fP
 
 SCRIPT_NATIVE nat_MPDistance(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 6);
+    CHECK_PARAM_COUNT(nat_MPDistance, 6);
 
     float tmpret;
 	tmpret = Distance(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]),    amx_ctof(params[4]), amx_ctof(params[5]), amx_ctof(params[6]));
@@ -341,7 +341,7 @@ SCRIPT_NATIVE nat_MPDistance(AMX* amx, cell* params) {
 
 SCRIPT_NATIVE nat_MPFDistance(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 6);
+    CHECK_PARAM_COUNT(nat_MPFDistance, 6);
 
     float tmpret;
 	tmpret = FDistance(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]),    amx_ctof(params[4]), amx_ctof(params[5]), amx_ctof(params[6]));
@@ -358,7 +358,7 @@ float VecLength(float fsx, float fsy, float fsz) {
 
 SCRIPT_NATIVE nat_MPVecLength(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 3);
+    CHECK_PARAM_COUNT(nat_MPVecLength, 3);
 
     float tmpret;
 	tmpret = VecLength(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]));
@@ -375,7 +375,7 @@ float FVecLength(float fsx, float fsy, float fsz) {
 
 SCRIPT_NATIVE nat_FMPVecLength(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 3);
+    CHECK_PARAM_COUNT(nat_FMPVecLength, 3);
 
     float tmpret;
 	tmpret = FVecLength(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]));
@@ -386,7 +386,7 @@ SCRIPT_NATIVE nat_FMPVecLength(AMX* amx, cell* params) {
 
 SCRIPT_NATIVE nat_FMPDistance(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 6);
+    CHECK_PARAM_COUNT(nat_FMPDistance, 6);
 
     float tmpret;
 	tmpret = FDistance(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]),    amx_ctof(params[4]), amx_ctof(params[5]), amx_ctof(params[6]));
@@ -398,7 +398,7 @@ SCRIPT_NATIVE nat_FMPDistance(AMX* amx, cell* params) {
 
 SCRIPT_NATIVE nat_MPProjectPointOnVehicle(AMX* amx, cell* params) {
 
-//    CHECK_PARAM_COUNT(PushString, 8);
+    CHECK_PARAM_COUNT(nat_MPProjectPointOnVehicle, 8);
 
     float v1[3];
     float resx, resy, resz;
@@ -427,7 +427,7 @@ SCRIPT_NATIVE nat_MPProjectPointOnVehicle(AMX* amx, cell* params) {
 	return 1;
 }
 
-int MPGetAimTarget(int playerid) {
+int MPGetAimTarget(int playerid, float searchradius) {
 
 
 	float ccpos[3];
@@ -436,7 +436,7 @@ int MPGetAimTarget(int playerid) {
 	GetPlayerCameraPos(playerid, ccpos[0], ccpos[1], ccpos[2]);
 	GetPlayerCameraFrontVector(playerid, ccfront[0], ccfront[1], ccfront[2]);
 
-//	logprintf("camera location for %d = (%0.5f %0.5f %0.5f) front (%0.5f %0.5f %0.5f)", playerid, ccpos[0], ccpos[1], ccpos[2], ccfront[0], ccfront[1], ccfront[2]);
+	//logprintf("camera location for %d = (%0.5f %0.5f %0.5f) front (%0.5f %0.5f %0.5f)", playerid, ccpos[0], ccpos[1], ccpos[2], ccfront[0], ccfront[1], ccfront[2]);
 
 	int closestplayer = INVALID_PLAYER_ID;
 	float distmax = 90000.0;
@@ -458,16 +458,16 @@ int MPGetAimTarget(int playerid) {
 
 		dist = Distance(ccpos[0], ccpos[1], ccpos[2], thiscoords[0], thiscoords[1], thiscoords[2]);
 
-		if (dist < camera_actor_seek_radius) {
+		//logprintf("(%0.5f %0.5f %0.5f) (%0.5f %0.5f %0.5f) distance %0.5f", ccpos[0], ccpos[1], ccpos[2], thiscoords[0], thiscoords[1], thiscoords[2], dist);
 
-			// logprintf("(%0.5f %0.5f %0.5f) (%0.5f %0.5f %0.5f) distance %0.5f", ccpos[0], ccpos[1], ccpos[2], thiscoords[0], thiscoords[1], thiscoords[2], dist);
+		if (dist < searchradius) {
 
 			// distance between camera and this player has to be
 			float camdist = DistanceCameraTargetToLocation(ccpos[0], ccpos[1], ccpos[2],   thiscoords[0], thiscoords[1], thiscoords[2],   ccfront[0], ccfront[1], ccfront[2] );
 
-			// logprintf("camdist = %0.5f", camdist);
+			//logprintf("camdist = %0.5f", camdist);
 
-			if ((distmax < dist) && (camdist < camera_actor_range_threshhold)) {
+			if ((camdist < distmax) && (camdist < camera_actor_range_threshhold)) {
 				closestplayer = i;
 				distmax = dist;
 			}
@@ -481,9 +481,9 @@ int MPGetAimTarget(int playerid) {
 
 SCRIPT_NATIVE nat_MPGetAimTarget(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 1);
+    CHECK_PARAM_COUNT(nat_MPGetAimTarget, 2);
 
-    return MPGetAimTarget(params[1]);
+    return MPGetAimTarget(params[1], amx_ctof(params[2]));
 
 }
 
@@ -560,7 +560,7 @@ bool ACPlayerConnect(int playerid) {
 SCRIPT_NATIVE nat_MPPLogConnect(AMX* amx, cell* params) {
 	int playerid;
 
-//    CHECK_PARAM_COUNT(PushString, 1);
+    CHECK_PARAM_COUNT(nat_MPPLogConnect, 1);
 
 	playerid = (int)params[1];
 
@@ -569,7 +569,7 @@ SCRIPT_NATIVE nat_MPPLogConnect(AMX* amx, cell* params) {
 
 SCRIPT_NATIVE nat_MPInterpolatePoint(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 10);
+    CHECK_PARAM_COUNT(nat_MPInterpolatePoint, 10);
 
     float resx, resy, resz;
 
@@ -670,7 +670,7 @@ float Clamp360(float angle) {
 
 SCRIPT_NATIVE nat_MPClamp360(AMX* amx, cell* params) {
 
-//	CHECK_PARAM_COUNT(PushString, 1);
+	CHECK_PARAM_COUNT(nat_MPClamp360, 1);
 
 	float ret = Clamp360(amx_ctof(params[1]));
 
@@ -679,7 +679,7 @@ SCRIPT_NATIVE nat_MPClamp360(AMX* amx, cell* params) {
 
 SCRIPT_NATIVE nat_MPFNormalize(AMX* amx, cell* params) {
 
-//    CHECK_PARAM_COUNT(PushString, 3);
+    CHECK_PARAM_COUNT(nat_MPFNormalize, 3);
 
 	float resx, resy, resz;
 
@@ -706,7 +706,7 @@ SCRIPT_NATIVE nat_MPFNormalize(AMX* amx, cell* params) {
 
 SCRIPT_NATIVE nat_MPFSQRT(AMX* amx, cell* params) {
 
-//    CHECK_PARAM_COUNT(PushString, 1);
+    CHECK_PARAM_COUNT(nat_MPFSQRT, 1);
 
 	float ret = FastSqrt(amx_ctof(params[1]));
 
@@ -717,7 +717,7 @@ SCRIPT_NATIVE nat_MPFSQRT(AMX* amx, cell* params) {
 SCRIPT_NATIVE nat_MPPLogAdd(AMX* amx, cell* params) {
 	int playerid;
 
-//    CHECK_PARAM_COUNT(PushString, 1);
+    CHECK_PARAM_COUNT(nat_MPPLogAdd, 1);
 
 	playerid = (int)params[1];
 
@@ -726,7 +726,7 @@ SCRIPT_NATIVE nat_MPPLogAdd(AMX* amx, cell* params) {
 
 SCRIPT_NATIVE nat_MPDistancePointLine(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 9);
+    CHECK_PARAM_COUNT(nat_MPDistancePointLine, 9);
 
     XYZ LineStart, LineEnd, Point;
 
@@ -746,7 +746,7 @@ SCRIPT_NATIVE nat_MPDistancePointLine(AMX* amx, cell* params) {
 
 SCRIPT_NATIVE nat_MPGetVehicleUpsideDown(AMX* amx, cell* params) {
 
-    //CHECK_PARAM_COUNT(PushString, 1);
+    CHECK_PARAM_COUNT(nat_MPGetVehicleUpsideDown, 1);
 
     float v1[3];
     float resx, resy, resz;
@@ -780,7 +780,7 @@ PLUGIN_EXPORT unsigned int PLUGIN_CALL Supports()  {
 PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppPluginData)  {
     // This always must be called first
     Wrapper::GetInstance()->Initialize(ppPluginData);
-    logprintf("Math Plugin FakeAMX Loaded.");
+    logprintf("Math Plugin Loaded.");
     // Set our gamemode as the main event handler
     //EventHandler::SetEventHandler(&::theGameMode);
     return true;
