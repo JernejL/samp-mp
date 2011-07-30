@@ -23,7 +23,6 @@
 
 #define MAX_SNAPSHOTS 60
 #define camera_actor_range_threshhold 0.75
-#define camera_actor_seek_radius 50.0
 
 // ----------------==========================================--------------- |
 //								User defined types
