@@ -30,6 +30,7 @@ using namespace sampgdk;
 		{ "MPDistancePointLine",		nat_MPDistancePointLine },
 		{ "MPInterpolatePoint",			nat_MPInterpolatePoint},
 		{ "MPDistance",					nat_MPDistance },
+		{ "MPFDistance",				nat_MPFDistance },
 		{ "MPPLogAdd",					nat_MPPLogAdd },
 		{ "MPFSQRT",					nat_MPFSQRT },
 		{ "MPClamp360",					nat_MPClamp360 },
@@ -333,6 +334,17 @@ SCRIPT_NATIVE nat_MPDistance(AMX* amx, cell* params) {
 
     float tmpret;
 	tmpret = Distance(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]),    amx_ctof(params[4]), amx_ctof(params[5]), amx_ctof(params[6]));
+
+	return amx_ftoc(tmpret);
+
+}
+
+SCRIPT_NATIVE nat_MPFDistance(AMX* amx, cell* params) {
+
+    //CHECK_PARAM_COUNT(PushString, 6);
+
+    float tmpret;
+	tmpret = FDistance(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]),    amx_ctof(params[4]), amx_ctof(params[5]), amx_ctof(params[6]));
 
 	return amx_ftoc(tmpret);
 
@@ -718,9 +730,9 @@ SCRIPT_NATIVE nat_MPDistancePointLine(AMX* amx, cell* params) {
 
     XYZ LineStart, LineEnd, Point;
 
-    LineStart.X =  amx_ctof(params[1]); LineStart.Y =   amx_ctof(params[2]); LineStart.Z =  amx_ctof(params[3]);
-    LineEnd.X   =  amx_ctof(params[4]); LineStart.Y =   amx_ctof(params[5]); LineStart.Z =  amx_ctof(params[6]);
-    Point.X     =  amx_ctof(params[7]); LineStart.Y =   amx_ctof(params[8]); LineStart.Z =  amx_ctof(params[9]);
+    Point.X     =  amx_ctof(params[1]); LineStart.Y =   amx_ctof(params[2]); LineStart.Z =  amx_ctof(params[3]);
+    LineStart.X =  amx_ctof(params[4]); LineStart.Y =   amx_ctof(params[5]); LineStart.Z =  amx_ctof(params[6]);
+    LineEnd.X   =  amx_ctof(params[7]); LineStart.Y =   amx_ctof(params[8]); LineStart.Z =  amx_ctof(params[9]);
 
     float linedist;
 
