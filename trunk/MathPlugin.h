@@ -72,5 +72,6 @@ struct psnapshot {
 	SCRIPT_NATIVE nat_MPGetTrailerTowingVehicle(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPVecLength(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_FMPVecLength(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPFDistance(AMX* amx, cell* params);
 
 
