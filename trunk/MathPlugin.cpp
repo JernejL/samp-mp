@@ -8,7 +8,7 @@
 #include <sampgdk/wrapper/wrapper.h>
 #include <sampgdk/plugin/plugin.h>
 
-#include <sampgdk\game\vehicles.h>
+#include <sampgdk/game/vehicles.h>
 
 using namespace sampgdk;
 
