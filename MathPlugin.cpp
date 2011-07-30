@@ -739,7 +739,7 @@ SCRIPT_NATIVE nat_MPDistancePointLine(AMX* amx, cell* params) {
     int isok = DistancePointLine( &Point, &LineStart, &LineEnd, &linedist );
 
 	if (isok == 0) // out of range
-		linedist = -1;
+		linedist = 10000000;
 
     return amx_ftoc(linedist);
 }
