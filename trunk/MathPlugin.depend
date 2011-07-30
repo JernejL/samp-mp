@@ -225,7 +225,7 @@
 
 1311877020 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\sampgdk\src\wrapper\jump.h
 
-1311892310 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\sampgdk\examples\mathplugin\mathplugin.cpp
+1312043958 source:c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\sampgdk\examples\mathplugin\mathplugin.cpp
 	"MathPlugin.h"
 	<math.h>
 	<sampgdk/logprintf.h>
@@ -234,9 +234,9 @@
 	<sampgdk/plugin/plugin.h>
 	<sampgdk/wrapper/wrapper.h>
 	<sampgdk/plugin/plugin.h>
-	<sampgdk\game\vehicles.h>
+	<sampgdk/game/vehicles.h>
 
-1311892224 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\sampgdk\examples\mathplugin\mathplugin.h
+1312042324 c:\documents and settings\jernej\desktop\psrvr\samp\plugins\zeex\sampgdk\examples\mathplugin\mathplugin.h
 	<sampgdk/game/samp.h>
 	<sampgdk/plugin/plugin.h>
 	<sampgdk/plugin/plugincommon.h>
