@@ -465,6 +465,10 @@ SCRIPT_NATIVE nat_MPProjectPointOnVehicle(AMX* amx, cell* params) {
 
 int MPGetAimTarget(int playerid, float searchradius) {
 
+	if ((IsPlayerConnected(playerid) == false) || (playerid > MAX_PLAYERS)) {
+		logprintf("MPGetAimTarget called for invalid player.");
+		return INVALID_PLAYER_ID;
+	}
 
 	float ccpos[3];
 	float ccfront[3];
