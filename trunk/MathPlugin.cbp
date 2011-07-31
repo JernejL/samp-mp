@@ -58,6 +58,10 @@
 			<Add directory="..\..\..\..\zeex" />
 			<Add directory="..\..\..\sampgdk" />
 		</Compiler>
+		<Linker>
+			<Add option="-static-libgcc" />
+			<Add option="-static-libstdc++" />
+		</Linker>
 		<Unit filename="..\..\SDK\amx\amx.h" />
 		<Unit filename="..\..\SDK\amx\getch.c">
 			<Option compilerVar="CC" />
