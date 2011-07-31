@@ -22,6 +22,7 @@ using namespace sampgdk;
 	    { "MPInit",						nat_MPInit},
 		{ "MPGetVehicleDriver",			nat_MPGetVehicleDriver },
 		{ "MPGetVehicleDriverCount",	nat_MPGetVehicleDriverCount },
+		{ "MPGetVehicleOccupantCnt",	nat_MPGetVehicleOccupantCnt },
 		{ "MPCrossProduct",				nat_MPCrossProduct },
 		{ "MPDotProduct",				nat_MPDotProduct },
 		{ "MPDistanceCameraToLocation",	nat_MPDistanceCameraTargetToLocation },
@@ -167,10 +168,45 @@ int GetVehicleDriverCount(int vehicleid) {
 
 }
 
+int GetVehicleOccupantCnt(int vehicleid) {
+
+    if ((vehicleid == 0) || (vehicleid == INVALID_VEHICLE_ID) || (vehicleid > MAX_VEHICLES))
+        return INVALID_PLAYER_ID;
+
+    int i;
+    int totalocc = 0;
+
+    for (i = 0; i < MAX_PLAYERS; i++) {
+
+        if (IsPlayerConnected(i) == false) // no connected player in slot?
+            continue;
+
+            int thisplayervehid;
+            thisplayervehid = GetPlayerVehicleID(i);
+
+            if (thisplayervehid == vehicleid) // found a connected player in this car.
+                totalocc++;
+
+    }
+
+    return totalocc; // return how many there are.
+
+}
+
 SCRIPT_NATIVE nat_MPGetVehicleDriverCount(AMX* amx, cell* params) {
 	int vehicleid;
 
     CHECK_PARAM_COUNT(nat_MPGetVehicleDriverCount, 1);
+
+	vehicleid = (int)params[1];
+
+	return GetVehicleDriverCount(vehicleid);
+}
+
+SCRIPT_NATIVE nat_MPGetVehicleOccupantCnt(AMX* amx, cell* params) {
+	int vehicleid;
+
+    CHECK_PARAM_COUNT(nat_MPGetVehicleOccupantCnt, 1);
 
 	vehicleid = (int)params[1];
 
@@ -551,6 +587,7 @@ void interpolatebetweenvectors(float ax, float ay, float az, float bx, float by,
 
 bool ACPlayerConnect(int playerid) {
 
+	// todo: also clear out all old data!
     curridx[playerid] = 0;
 
     return true;
