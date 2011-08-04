@@ -1,10 +1,10 @@
 #ifndef SAMPLE_GAMEMODE_H
 #define SAMPLE_GAMEMODE_H
 
-#include <sampgdk/game/samp.h>
-#include <sampgdk/plugin/plugin.h>
-#include <sampgdk/plugin/plugincommon.h>
-#include <sampgdk/plugin/amx/amx.h>
+#include <sampgdk/samp.h>
+#include <sampgdk/include/sampgdk/plugin.h>
+#include <sampgdk/include/sampgdk/plugincommon.h>
+#include <sampgdk/include/sampgdk/amx/amx.h>
 
 #endif
 

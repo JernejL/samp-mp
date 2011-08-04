@@ -11,18 +11,21 @@
 		<Cursor position="0" topLine="28" />
 	</File>
 	<File name="MathPlugin.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="23197" topLine="749" />
+		<Cursor position="7058" topLine="245" />
 	</File>
 	<File name="MathPlugin.h" open="1" top="0" tabpos="2">
-		<Cursor position="241" topLine="0" />
+		<Cursor position="194" topLine="0" />
 	</File>
 	<File name="..\..\src\game\fakeamx.cpp" open="1" top="0" tabpos="5">
 		<Cursor position="2" topLine="0" />
 	</File>
+	<File name="..\..\src\game\players.cpp" open="1" top="0" tabpos="7">
+		<Cursor position="20598" topLine="700" />
+	</File>
 	<File name="..\..\src\wrapper\callbacks.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="672" topLine="0" />
+		<Cursor position="15932" topLine="629" />
 	</File>
 	<File name="..\..\src\wrapper\wrapper.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="0" topLine="0" />
+		<Cursor position="4550" topLine="121" />
 	</File>
 </CodeBlocks_layout_file>
