@@ -1,31 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release Win32" />
-	<File name="..\..\SDK\amx\amx.h" open="0" top="0" tabpos="0">
-		<Cursor position="9347" topLine="251" />
+	<File name="MathPlugin.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="24323" topLine="807" />
 	</File>
-	<File name="..\..\SDK\amxplugin.cpp" open="1" top="0" tabpos="6">
-		<Cursor position="37" topLine="0" />
+	<File name="MathPlugin.h" open="0" top="0" tabpos="2">
+		<Cursor position="202" topLine="0" />
 	</File>
-	<File name="..\..\SDK\plugincommon.h" open="0" top="0" tabpos="0">
-		<Cursor position="0" topLine="28" />
-	</File>
-	<File name="MathPlugin.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="7058" topLine="245" />
-	</File>
-	<File name="MathPlugin.h" open="1" top="0" tabpos="2">
-		<Cursor position="194" topLine="0" />
-	</File>
-	<File name="..\..\src\game\fakeamx.cpp" open="1" top="0" tabpos="5">
-		<Cursor position="2" topLine="0" />
-	</File>
-	<File name="..\..\src\game\players.cpp" open="1" top="0" tabpos="7">
-		<Cursor position="20598" topLine="700" />
-	</File>
-	<File name="..\..\src\wrapper\callbacks.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="15932" topLine="629" />
-	</File>
-	<File name="..\..\src\wrapper\wrapper.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="4550" topLine="121" />
+	<File name="..\..\src\funcidx.cpp" open="1" top="1" tabpos="2">
+		<Cursor position="838" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

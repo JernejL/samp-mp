@@ -1,13 +1,12 @@
 #include "MathPlugin.h"
 
 #include <math.h>
-#include <sampgdk/logprintf.h>
-#include <sampgdk/samp.h>
-#include <sampgdk/players.h>
-#include <sampgdk/wrapper.h>
-#include <sampgdk/include/sampgdk/plugin.h>
-
-#include <sampgdk/vehicles.h>
+#include <logprintf.h>
+#include <samp.h>
+#include <players.h>
+#include <wrapper.h>
+#include <plugin.h>
+#include <vehicles.h>
 
 using namespace sampgdk;
 
@@ -464,7 +463,7 @@ SCRIPT_NATIVE nat_MPProjectPointOnVehicle(AMX* amx, cell* params) {
 
 int MPGetAimTarget(int playerid, float searchradius) {
 
-	logprintf("MPGetAimTarget called for player %d with radius %0.3f", playerid, searchradius);
+	//logprintf("MPGetAimTarget called for player %d with radius %0.3f", playerid, searchradius);
 
 	if ((IsPlayerConnected(playerid) == false) || (playerid > MAX_PLAYERS)) {
 		logprintf("MPGetAimTarget called for invalid player.");
@@ -565,6 +564,8 @@ int DistancePointLine( XYZ *Point, XYZ *LineStart, XYZ *LineEnd, float *Distance
     float LineMag;
     float U;
     XYZ Intersection;
+
+//	logprintf("(%0.5f %0.5f %0.5f ) (%0.5f %0.5f %0.5f ) (%0.5f %0.5f %0.5f ) ", Point->X, Point->Y, Point->Z, LineStart->X, LineStart->Y, LineStart->Z, LineEnd->X, LineEnd->Y, LineEnd->Z);
 
     LineMag = Magnitude( LineEnd, LineStart );
 
@@ -773,16 +774,18 @@ SCRIPT_NATIVE nat_MPDistancePointLine(AMX* amx, cell* params) {
 
     XYZ LineStart, LineEnd, Point;
 
-    Point.X     =  amx_ctof(params[1]); LineStart.Y =   amx_ctof(params[2]); LineStart.Z =  amx_ctof(params[3]);
+    Point.X     =  amx_ctof(params[1]); Point.Y =   	amx_ctof(params[2]); Point.Z =  	amx_ctof(params[3]);
     LineStart.X =  amx_ctof(params[4]); LineStart.Y =   amx_ctof(params[5]); LineStart.Z =  amx_ctof(params[6]);
-    LineEnd.X   =  amx_ctof(params[7]); LineStart.Y =   amx_ctof(params[8]); LineStart.Z =  amx_ctof(params[9]);
+    LineEnd.X   =  amx_ctof(params[7]); LineEnd.Y =   	amx_ctof(params[8]); LineEnd.Z =  	amx_ctof(params[9]);
 
     float linedist;
+
+// DistancePointLine( XYZ *Point, XYZ *LineStart, XYZ *LineEnd, float *Distance )
 
     int isok = DistancePointLine( &Point, &LineStart, &LineEnd, &linedist );
 
 	if (isok == 0) // out of range
-		linedist = 10000000;
+		linedist = 10000000.0;
 
     return amx_ftoc(linedist);
 }
