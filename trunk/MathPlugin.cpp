@@ -2,13 +2,12 @@
 
 #include <math.h>
 #include <sampgdk/logprintf.h>
-#include <sampgdk/game/samp.h>
-#include <sampgdk/game/players.h>
-#include <sampgdk/plugin/plugin.h>
-#include <sampgdk/wrapper/wrapper.h>
-#include <sampgdk/plugin/plugin.h>
+#include <sampgdk/samp.h>
+#include <sampgdk/players.h>
+#include <sampgdk/wrapper.h>
+#include <sampgdk/include/sampgdk/plugin.h>
 
-#include <sampgdk/game/vehicles.h>
+#include <sampgdk/vehicles.h>
 
 using namespace sampgdk;
 
@@ -465,6 +464,8 @@ SCRIPT_NATIVE nat_MPProjectPointOnVehicle(AMX* amx, cell* params) {
 
 int MPGetAimTarget(int playerid, float searchradius) {
 
+	logprintf("MPGetAimTarget called for player %d with radius %0.3f", playerid, searchradius);
+
 	if ((IsPlayerConnected(playerid) == false) || (playerid > MAX_PLAYERS)) {
 		logprintf("MPGetAimTarget called for invalid player.");
 		return INVALID_PLAYER_ID;
@@ -473,8 +474,9 @@ int MPGetAimTarget(int playerid, float searchradius) {
 	float ccpos[3];
 	float ccfront[3];
 
-	GetPlayerCameraPos(playerid, ccpos[0], ccpos[1], ccpos[2]);
 	GetPlayerCameraFrontVector(playerid, ccfront[0], ccfront[1], ccfront[2]);
+
+	GetPlayerCameraPos(playerid, ccpos[0], ccpos[1], ccpos[2]);
 
 	//logprintf("camera location for %d = (%0.5f %0.5f %0.5f) front (%0.5f %0.5f %0.5f)", playerid, ccpos[0], ccpos[1], ccpos[2], ccfront[0], ccfront[1], ccfront[2]);
 
