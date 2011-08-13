@@ -3,6 +3,7 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="MathPlugin" />
+		<Option makefile="makefile" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -38,15 +39,18 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-W" />
+					<Add option="-include stddef.h" />
+					<Add option="-DHAVE_MALLOC_H" />
 					<Add option="-DWIN32" />
 					<Add option="-DNDEBUG" />
 					<Add option="-D_WINDOWS" />
 					<Add option="-D_USRDLL" />
 					<Add option="-DMathPlugin_EXPORTS" />
-					<Add directory="..\..\..\sampgdk" />
+					<Add directory="..\..\src" />
+					<Add directory="..\..\include\sampgdk" />
+					<Add directory="..\..\include\sampgdk\amx" />
 					<Add directory="..\..\..\..\zeex" />
 					<Add directory="..\..\include" />
-					<Add directory="..\..\src" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -55,6 +59,8 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-include stddef.h" />
+			<Add option="-DHAVE_STDINT_H" />
 			<Add directory="..\..\..\..\zeex" />
 			<Add directory="..\..\..\sampgdk" />
 		</Compiler>
@@ -62,30 +68,39 @@
 			<Add option="-static-libgcc" />
 			<Add option="-static-libstdc++" />
 		</Linker>
-		<Unit filename="..\..\SDK\amx\amx.h" />
-		<Unit filename="..\..\SDK\amx\getch.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\SDK\amx\getch.h" />
-		<Unit filename="..\..\SDK\amx\sclinux.h" />
-		<Unit filename="..\..\SDK\amxplugin.cpp" />
-		<Unit filename="..\..\SDK\plugin.h" />
-		<Unit filename="..\..\SDK\plugincommon.h" />
 		<Unit filename="MathPlugin.cpp" />
 		<Unit filename="MathPlugin.def" />
 		<Unit filename="MathPlugin.h" />
-		<Unit filename="..\..\src\game\fakeamx.cpp" />
-		<Unit filename="..\..\src\game\fakeamx.h" />
-		<Unit filename="..\..\src\game\objects.cpp" />
-		<Unit filename="..\..\src\game\players.cpp" />
-		<Unit filename="..\..\src\game\samp.cpp" />
-		<Unit filename="..\..\src\game\vehicles.cpp" />
+		<Unit filename="..\..\include\sampgdk\eventhandler.h" />
+		<Unit filename="..\..\include\sampgdk\logprintf.h" />
+		<Unit filename="..\..\include\sampgdk\objects.h" />
+		<Unit filename="..\..\include\sampgdk\players.h" />
+		<Unit filename="..\..\include\sampgdk\plugin.h" />
+		<Unit filename="..\..\include\sampgdk\plugincommon.h" />
+		<Unit filename="..\..\include\sampgdk\samp.h" />
+		<Unit filename="..\..\include\sampgdk\vehicles.h" />
+		<Unit filename="..\..\include\sampgdk\wrapper.h" />
+		<Unit filename="..\..\src\amxapihooks.cpp" />
+		<Unit filename="..\..\src\amxapihooks.h" />
+		<Unit filename="..\..\src\amxplugin.cpp" />
+		<Unit filename="..\..\src\callbacks.cpp" />
+		<Unit filename="..\..\src\callbacks.h" />
+		<Unit filename="..\..\src\eventhandler.cpp" />
+		<Unit filename="..\..\src\fakeamx.cpp" />
+		<Unit filename="..\..\src\fakeamx.h" />
+		<Unit filename="..\..\src\funcidx.cpp" />
+		<Unit filename="..\..\src\gamemode.cpp" />
+		<Unit filename="..\..\src\gamemode.h" />
+		<Unit filename="..\..\src\hooknative.cpp" />
+		<Unit filename="..\..\src\hooknative.h" />
+		<Unit filename="..\..\src\jump.cpp" />
+		<Unit filename="..\..\src\jump.h" />
 		<Unit filename="..\..\src\logprintf.cpp" />
-		<Unit filename="..\..\src\wrapper\callbacks.cpp" />
-		<Unit filename="..\..\src\wrapper\eventhandler.cpp" />
-		<Unit filename="..\..\src\wrapper\jump.cpp" />
-		<Unit filename="..\..\src\wrapper\jump.h" />
-		<Unit filename="..\..\src\wrapper\wrapper.cpp" />
+		<Unit filename="..\..\src\objects.cpp" />
+		<Unit filename="..\..\src\players.cpp" />
+		<Unit filename="..\..\src\samp.cpp" />
+		<Unit filename="..\..\src\vehicles.cpp" />
+		<Unit filename="..\..\src\wrapper.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

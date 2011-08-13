@@ -21,10 +21,12 @@ using namespace sampgdk;
 		{ "MPGetVehicleDriver",			nat_MPGetVehicleDriver },
 		{ "MPGetVehicleDriverCount",	nat_MPGetVehicleDriverCount },
 		{ "MPGetVehicleOccupantCnt",	nat_MPGetVehicleOccupantCnt },
+		{ "MPGetVehicleSurfersCnt", 	nat_MPGetVehicleSurfersCnt},
 		{ "MPCrossProduct",				nat_MPCrossProduct },
 		{ "MPDotProduct",				nat_MPDotProduct },
 		{ "MPDistanceCameraToLocation",	nat_MPDistanceCameraTargetToLocation },
 		{ "MPProjectPointOnVehicle",	nat_MPProjectPointOnVehicle},
+		{ "MPProjectPointOnPlayer",		nat_MPProjectPointOnPlayer},
 		{ "MPGetAimTarget",				nat_MPGetAimTarget },
 		{ "MPDistancePointLine",		nat_MPDistancePointLine },
 		{ "MPInterpolatePoint",			nat_MPInterpolatePoint},
@@ -179,8 +181,61 @@ int GetVehicleOccupantCnt(int vehicleid) {
         if (IsPlayerConnected(i) == false) // no connected player in slot?
             continue;
 
+			if (GetPlayerVirtualWorld(i) != GetVehicleVirtualWorld(vehicleid)) // solves specific issues if you put paused players into separate virtual world.
+				continue;
+
             int thisplayervehid;
             thisplayervehid = GetPlayerVehicleID(i);
+
+            if (thisplayervehid == vehicleid) // found a connected player in this car.
+                totalocc++;
+
+    }
+
+    return totalocc; // return how many there are.
+
+}
+
+void ProjectPointOnPlayer(int PlayerID, float incoords_x, float incoords_y, float incoords_z, float &outx, float &outy, float &outz) {
+
+	float playerpos[3];
+	float playerheading;
+	GetPlayerPos(PlayerID, playerpos[0], playerpos[1], playerpos[2]);
+	GetPlayerFacingAngle(PlayerID, playerheading);
+
+	float originalangle;
+	originalangle = atan2(incoords_x, incoords_y) * 180 / PI;
+
+	float originaldistance;
+	originaldistance = FastSqrt(incoords_x * incoords_x + incoords_y * incoords_y);
+
+	originalangle -= playerheading;
+
+	// *PI/180 = degtorad
+	outx = playerpos[0] + sin(originalangle * PI/180) * originaldistance;
+	outy = playerpos[1] + cos(originalangle * PI/180) * originaldistance;
+	outz = incoords_z + playerpos[2]; // nothing magical on Z!
+
+}
+
+int GetVehicleSurfersCnt(int vehicleid) {
+
+    if ((vehicleid == 0) || (vehicleid == INVALID_VEHICLE_ID) || (vehicleid > MAX_VEHICLES))
+        return INVALID_PLAYER_ID;
+
+    int i;
+    int totalocc = 0;
+
+    for (i = 0; i < MAX_PLAYERS; i++) {
+
+        if (IsPlayerConnected(i) == false) // no connected player in slot?
+            continue;
+
+			if (GetPlayerVirtualWorld(i) != GetVehicleVirtualWorld(vehicleid)) // solves specific issues if you put paused players into separate virtual world.
+				continue;
+
+            int thisplayervehid;
+            thisplayervehid = GetPlayerSurfingVehicleID(i);
 
             if (thisplayervehid == vehicleid) // found a connected player in this car.
                 totalocc++;
@@ -208,7 +263,17 @@ SCRIPT_NATIVE nat_MPGetVehicleOccupantCnt(AMX* amx, cell* params) {
 
 	vehicleid = (int)params[1];
 
-	return GetVehicleDriverCount(vehicleid);
+	return GetVehicleOccupantCnt(vehicleid);
+}
+
+SCRIPT_NATIVE nat_MPGetVehicleSurfersCnt(AMX* amx, cell* params) {
+	int vehicleid;
+
+    CHECK_PARAM_COUNT(nat_MPGetVehicleSurfersCnt, 1);
+
+	vehicleid = (int)params[1];
+
+	return GetVehicleSurfersCnt(vehicleid);
 }
 
 void MPCrossProduct(float v1[3], float v2[3], float &resx, float &resy, float &resz) {
@@ -444,6 +509,32 @@ SCRIPT_NATIVE nat_MPProjectPointOnVehicle(AMX* amx, cell* params) {
     v1[2] = amx_ctof(params[4]);
 
     MPProjectPointOnVehicle(vehid, v1, resx, resy, resz, params[8]);
+
+	//logprintf("%0.5f %0.5f %0.5f", resx, resy, resz);
+
+	cell* padd = NULL;
+
+	amx_GetAddr(amx, params[5], &padd);
+	*padd = amx_ftoc(resx);
+
+	amx_GetAddr(amx, params[6], &padd);
+	*padd = amx_ftoc(resy);
+
+	amx_GetAddr(amx, params[7], &padd);
+	*padd = amx_ftoc(resz);
+
+	return 1;
+}
+
+SCRIPT_NATIVE nat_MPProjectPointOnPlayer(AMX* amx, cell* params) {
+
+    CHECK_PARAM_COUNT(nat_MPProjectPointOnVehicle, 7);
+
+    float resx, resy, resz;
+
+    int playerid = params[1];
+
+	ProjectPointOnPlayer(playerid, amx_ctof(params[2]), amx_ctof(params[3]), amx_ctof(params[4]), resx, resy, resz);
 
 	//logprintf("%0.5f %0.5f %0.5f", resx, resy, resz);
 
