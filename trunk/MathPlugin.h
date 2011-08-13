@@ -23,6 +23,7 @@
 
 #define MAX_SNAPSHOTS 60
 #define camera_actor_range_threshhold 0.75
+#define PI 3.14159265
 
 // ----------------==========================================--------------- |
 //								User defined types
@@ -73,5 +74,6 @@ struct psnapshot {
 	SCRIPT_NATIVE nat_FMPVecLength(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPFDistance(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPGetVehicleOccupantCnt(AMX* amx, cell* params);
-
+	SCRIPT_NATIVE nat_MPGetVehicleSurfersCnt(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPProjectPointOnPlayer(AMX* amx, cell* params);
 
