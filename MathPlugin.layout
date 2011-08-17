@@ -2,24 +2,24 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release Win32" />
 	<File name="MathPlugin.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="16024" topLine="545" />
+		<Cursor position="24756" topLine="799" />
 	</File>
-	<File name="MathPlugin.h" open="1" top="0" tabpos="9">
-		<Cursor position="52" topLine="0" />
+	<File name="MathPlugin.h" open="1" top="0" tabpos="2">
+		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="..\..\src\amxapihooks.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="3902" topLine="78" />
+	<File name="..\..\src\amxapihooks.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="3902" topLine="72" />
 	</File>
-	<File name="..\..\src\amxapihooks.h" open="1" top="0" tabpos="10">
-		<Cursor position="646" topLine="12" />
+	<File name="..\..\src\amxapihooks.h" open="1" top="0" tabpos="6">
+		<Cursor position="646" topLine="6" />
 	</File>
-	<File name="..\..\src\funcidx.cpp" open="1" top="0" tabpos="8">
+	<File name="..\..\src\funcidx.cpp" open="1" top="0" tabpos="5">
 		<Cursor position="434" topLine="0" />
 	</File>
-	<File name="..\..\src\hooknative.cpp" open="1" top="0" tabpos="11">
+	<File name="..\..\src\hooknative.cpp" open="1" top="0" tabpos="7">
 		<Cursor position="630" topLine="0" />
 	</File>
-	<File name="..\..\src\wrapper.cpp" open="1" top="0" tabpos="2">
+	<File name="..\..\src\wrapper.cpp" open="1" top="0" tabpos="3">
 		<Cursor position="1548" topLine="29" />
 	</File>
 </CodeBlocks_layout_file>

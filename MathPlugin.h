@@ -71,9 +71,12 @@ struct psnapshot {
     SCRIPT_NATIVE nat_MPDotProduct(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPGetTrailerTowingVehicle(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPVecLength(AMX* amx, cell* params);
-	SCRIPT_NATIVE nat_FMPVecLength(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPFVecLength(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPFDistance(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPGetVehicleOccupantCnt(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPGetVehicleSurfersCnt(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPProjectPointOnPlayer(AMX* amx, cell* params);
 
+	SCRIPT_NATIVE nat_MPWithinRange(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPPtInRect3D(AMX* amx, cell* params);

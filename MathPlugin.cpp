@@ -40,7 +40,11 @@ using namespace sampgdk;
 		{ "MPGetVehicleUpsideDown",		nat_MPGetVehicleUpsideDown },
 		{ "MPGetTrailerTowingVehicle",	nat_MPGetTrailerTowingVehicle },
 		{ "MPVecLength",				nat_MPVecLength },
-		{ "FMPVecLength",				nat_FMPVecLength },
+		{ "MPFVecLength",				nat_MPFVecLength },
+
+		{ "MPInRange",					nat_MPWithinRange },
+		{ "MPPtInRect2D",				nat_MPPtInRect2D },
+		{ "MPPtInRect3D",				nat_MPPtInRect3D },
 
 		{ 0,					    	0 }
 	};
@@ -472,9 +476,9 @@ float FVecLength(float fsx, float fsy, float fsz) {
 
 }
 
-SCRIPT_NATIVE nat_FMPVecLength(AMX* amx, cell* params) {
+SCRIPT_NATIVE nat_MPFVecLength(AMX* amx, cell* params) {
 
-    CHECK_PARAM_COUNT(nat_FMPVecLength, 3);
+    CHECK_PARAM_COUNT(nat_MPFVecLength, 3);
 
     float tmpret;
 	tmpret = FVecLength(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]));
@@ -903,6 +907,77 @@ SCRIPT_NATIVE nat_MPGetVehicleUpsideDown(AMX* amx, cell* params) {
 
 	return amx_ftoc(resz);
 }
+
+float IsFltWithin(float a, float b, float value) {
+
+	float minv = a;
+	float maxv = b;
+
+	if (b < a) {
+		minv = b;
+		maxv = a;
+	}
+
+	if ((value >= minv) && (value <= maxv))
+		return 1;
+
+	return 0;
+}
+
+
+int FltInRange(float a, float b, float value, float ExtraBorder) {
+
+	float minv = a;
+	float maxv = b;
+
+	if (b < a) {
+		minv = b;
+		maxv = a;
+	}
+
+	if ((value + ExtraBorder > minv) && (value - ExtraBorder < maxv))
+		return 1;
+
+	return 0;
+}
+
+SCRIPT_NATIVE nat_MPWithinRange(AMX* amx, cell* params) {
+
+    CHECK_PARAM_COUNT(nat_MPWithinRange, 3);
+
+	int result;
+
+	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[2]));
+
+	return amx_ftoc(result);
+}
+
+SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params) {
+
+    CHECK_PARAM_COUNT(nat_MPPtInRect2D, 6);
+
+	int result;
+	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[5]));
+	if (result == 1)
+		result = IsFltWithin(amx_ctof(params[3]), amx_ctof(params[4]), amx_ctof(params[6]));
+
+	return amx_ftoc(result);
+}
+
+SCRIPT_NATIVE nat_MPPtInRect3D(AMX* amx, cell* params) {
+
+    CHECK_PARAM_COUNT(nat_MPPtInRect3D, 9);
+
+	int result;
+	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[7]));
+	if (result == 1)
+		result = IsFltWithin(amx_ctof(params[3]), amx_ctof(params[4]), amx_ctof(params[8]));
+	if (result == 1)
+		result = IsFltWithin(amx_ctof(params[5]), amx_ctof(params[6]), amx_ctof(params[9]));
+
+	return amx_ftoc(result);
+}
+
 
 SCRIPT_NATIVE nat_MPInit(AMX * amx, cell * params)
 {
