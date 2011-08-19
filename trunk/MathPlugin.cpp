@@ -918,6 +918,8 @@ float IsFltWithin(float a, float b, float value) {
 		maxv = a;
 	}
 
+	//logprintf("from %0.5f to %0.5f value %0.5f ", minv, maxv, value);
+
 	if ((value >= minv) && (value <= maxv))
 		return 1;
 
@@ -947,7 +949,7 @@ SCRIPT_NATIVE nat_MPWithinRange(AMX* amx, cell* params) {
 
 	int result;
 
-	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[2]));
+	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]));
 
 	return amx_ftoc(result);
 }
@@ -957,9 +959,9 @@ SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params) {
     CHECK_PARAM_COUNT(nat_MPPtInRect2D, 6);
 
 	int result;
-	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[5]));
+	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[3]), amx_ctof(params[5]));
 	if (result == 1)
-		result = IsFltWithin(amx_ctof(params[3]), amx_ctof(params[4]), amx_ctof(params[6]));
+		result = IsFltWithin(amx_ctof(params[2]), amx_ctof(params[4]), amx_ctof(params[6]));
 
 	return amx_ftoc(result);
 }
@@ -969,11 +971,11 @@ SCRIPT_NATIVE nat_MPPtInRect3D(AMX* amx, cell* params) {
     CHECK_PARAM_COUNT(nat_MPPtInRect3D, 9);
 
 	int result;
-	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[7]));
+	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[4]), amx_ctof(params[7]));
 	if (result == 1)
-		result = IsFltWithin(amx_ctof(params[3]), amx_ctof(params[4]), amx_ctof(params[8]));
+		result = IsFltWithin(amx_ctof(params[2]), amx_ctof(params[5]), amx_ctof(params[8]));
 	if (result == 1)
-		result = IsFltWithin(amx_ctof(params[5]), amx_ctof(params[6]), amx_ctof(params[9]));
+		result = IsFltWithin(amx_ctof(params[3]), amx_ctof(params[6]), amx_ctof(params[9]));
 
 	return amx_ftoc(result);
 }
