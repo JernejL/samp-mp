@@ -7,17 +7,15 @@
 #include <wrapper.h>
 #include <plugin.h>
 #include <vehicles.h>
+#include <hooknative.h>
 
 using namespace sampgdk;
 
-    int curridx[MAX_PLAYERS]; // at which point is the cycle?
-    psnapshot datacache[MAX_PLAYERS][MAX_SNAPSHOTS];
 
 	// And an array containing the native function-names and the functions
 	// specified with them.
 	AMX_NATIVE_INFO natives[ ] =
 	{
-	    { "MPInit",						nat_MPInit},
 		{ "MPGetVehicleDriver",			nat_MPGetVehicleDriver },
 		{ "MPGetVehicleDriverCount",	nat_MPGetVehicleDriverCount },
 		{ "MPGetVehicleOccupantCnt",	nat_MPGetVehicleOccupantCnt },
@@ -27,16 +25,15 @@ using namespace sampgdk;
 		{ "MPDistanceCameraToLocation",	nat_MPDistanceCameraTargetToLocation },
 		{ "MPProjectPointOnVehicle",	nat_MPProjectPointOnVehicle},
 		{ "MPProjectPointOnPlayer",		nat_MPProjectPointOnPlayer},
+		{ "MPProjectPointXYZA",			nat_MPProjectPointXYZA},
 		{ "MPGetAimTarget",				nat_MPGetAimTarget },
 		{ "MPDistancePointLine",		nat_MPDistancePointLine },
 		{ "MPInterpolatePoint",			nat_MPInterpolatePoint},
 		{ "MPDistance",					nat_MPDistance },
 		{ "MPFDistance",				nat_MPFDistance },
-		{ "MPPLogAdd",					nat_MPPLogAdd },
 		{ "MPFSQRT",					nat_MPFSQRT },
 		{ "MPClamp360",					nat_MPClamp360 },
 		{ "MPFNormalize",				nat_MPFNormalize },
-		{ "MPPLogConnect",				nat_MPPLogConnect },
 		{ "MPGetVehicleUpsideDown",		nat_MPGetVehicleUpsideDown },
 		{ "MPGetTrailerTowingVehicle",	nat_MPGetTrailerTowingVehicle },
 		{ "MPVecLength",				nat_MPVecLength },
@@ -48,6 +45,31 @@ using namespace sampgdk;
 
 		{ 0,					    	0 }
 	};
+
+// i got this from blueg's plugin, no idea who wrote this originally
+std::string GetString(AMX* amx,cell param)
+{
+	cell *pString;
+	char *szDest;
+	int nLen;
+	amx_GetAddr(amx,param,&pString);
+	amx_StrLen(pString, &nLen);
+	szDest = new char[nLen+1];
+	amx_GetString(szDest, pString, 0, UNLIMITED);
+	szDest[nLen] = '\0';
+	std::string szReturn(szDest);
+	delete szDest;
+	return szReturn;
+}
+
+float refcell2float(AMX* amx, cell param) {
+
+	cell* padd;
+	amx_GetAddr(amx, param, &padd);
+	cell value = *padd;
+	return amx_ctof(value);
+}
+
 
 // google 0x5f3759df
 float FastSqrt(float number) {
@@ -197,6 +219,25 @@ int GetVehicleOccupantCnt(int vehicleid) {
     }
 
     return totalocc; // return how many there are.
+
+}
+
+void ProjectPointXYZA(
+				float origin_x, float origin_y, float origin_z, float playerheading,
+				float incoords_x, float incoords_y, float incoords_z, float &outx, float &outy, float &outz) {
+
+	float originalangle;
+	originalangle = atan2(incoords_x, incoords_y) * 180 / PI;
+
+	float originaldistance;
+	originaldistance = FastSqrt(incoords_x * incoords_x + incoords_y * incoords_y);
+
+	originalangle -= playerheading;
+
+	// *PI/180 = degtorad
+	outx = origin_x + sin(originalangle * PI/180) * originaldistance;
+	outy = origin_y + cos(originalangle * PI/180) * originaldistance;
+	outz = incoords_z + origin_z; // nothing magical on Z!
 
 }
 
@@ -530,6 +571,34 @@ SCRIPT_NATIVE nat_MPProjectPointOnVehicle(AMX* amx, cell* params) {
 	return 1;
 }
 
+SCRIPT_NATIVE nat_MPProjectPointXYZA(AMX* amx, cell* params) {
+
+    CHECK_PARAM_COUNT(nat_MPProjectPointXYZA, 10);
+
+    float resx, resy, resz;
+
+	ProjectPointXYZA(
+					amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]), amx_ctof(params[4]),
+					amx_ctof(params[5]), amx_ctof(params[6]), amx_ctof(params[7]),
+					resx, resy, resz);
+
+	//logprintf("%0.5f %0.5f %0.5f", resx, resy, resz);
+
+	cell* padd = NULL;
+
+	amx_GetAddr(amx, params[8], &padd);
+	*padd = amx_ftoc(resx);
+
+	amx_GetAddr(amx, params[9], &padd);
+	*padd = amx_ftoc(resy);
+
+	amx_GetAddr(amx, params[10], &padd);
+	*padd = amx_ftoc(resz);
+
+	return 1;
+
+}
+
 SCRIPT_NATIVE nat_MPProjectPointOnPlayer(AMX* amx, cell* params) {
 
     CHECK_PARAM_COUNT(nat_MPProjectPointOnVehicle, 7);
@@ -687,25 +756,6 @@ void interpolatebetweenvectors(float ax, float ay, float az, float bx, float by,
 	rz = az + distance * (bz - az);
 }
 
-bool ACPlayerConnect(int playerid) {
-
-	// todo: also clear out all old data!
-    curridx[playerid] = 0;
-
-    return true;
-
-}
-
-SCRIPT_NATIVE nat_MPPLogConnect(AMX* amx, cell* params) {
-	int playerid;
-
-    CHECK_PARAM_COUNT(nat_MPPLogConnect, 1);
-
-	playerid = (int)params[1];
-
-	return ACPlayerConnect(playerid);
-}
-
 SCRIPT_NATIVE nat_MPInterpolatePoint(AMX* amx, cell* params) {
 
     CHECK_PARAM_COUNT(nat_MPInterpolatePoint, 10);
@@ -726,68 +776,6 @@ SCRIPT_NATIVE nat_MPInterpolatePoint(AMX* amx, cell* params) {
 	*padd = amx_ftoc(resz);
 
 	return 1;
-}
-
-bool ACProcessUpdate(int playerid) {
-
-    int aridx = curridx[playerid];
-
-    datacache[playerid][ aridx ].vehicleid = GetPlayerVehicleID(playerid);
-
-/*
-// tickcount doesn't work - no idea why.
-    int gran = 0;
-    datacache[playerid][ aridx ].SnapTime = invoke->callNative(&PAWN::tickcount, &gran);
-    logprintf("%d -> %d", gran, datacache[playerid][ aridx ].SnapTime);
-*/
-    datacache[playerid][ aridx ].SnapTime = 0; //obtainCurrentTime();//invoke->callNative(&PAWN::GetTickCount);
-
-    if (datacache[playerid][ aridx ].vehicleid == 0) {
-        GetPlayerPos(playerid, datacache[playerid][ aridx ].Position[0], datacache[playerid][ aridx ].Position[1], datacache[playerid][ aridx ].Position[2]);
-        GetPlayerVelocity(playerid, datacache[playerid][ aridx ].Velocity[0], datacache[playerid][ aridx ].Velocity[1], datacache[playerid][ aridx ].Velocity[2]);
-        GetPlayerFacingAngle(playerid, datacache[playerid][ aridx ].Heading);
-    } else {
-        GetVehiclePos(datacache[playerid][ aridx ].vehicleid, datacache[playerid][ aridx ].Position[0], datacache[playerid][ aridx ].Position[1], datacache[playerid][ aridx ].Position[2]);
-        GetVehicleVelocity(datacache[playerid][ aridx ].vehicleid, datacache[playerid][ aridx ].Velocity[0], datacache[playerid][ aridx ].Velocity[1], datacache[playerid][ aridx ].Velocity[2]);
-        GetVehicleZAngle(datacache[playerid][ aridx ].vehicleid, datacache[playerid][ aridx ].Heading);
-    }
-
-
-    // source of mega crashes.
-    //MapAndreas_FindZ_For2DCoord(playerid, datacache[playerid][ aridx ].Position[0], datacache[playerid][ aridx ].Position[1], &datacache[playerid][ aridx ].groundlevel);
-
-    GetPlayerCameraPos(playerid, datacache[playerid][ aridx ].CamPos[0], datacache[playerid][ aridx ].CamPos[1], datacache[playerid][ aridx ].CamPos[2]);
-    GetPlayerCameraFrontVector(playerid, datacache[playerid][ aridx ].CamFront[0], datacache[playerid][ aridx ].CamFront[1], datacache[playerid][ aridx ].CamFront[2]);
-
-/*
-		ping					= GetPlayerPing(PlayerID);
-		player_state			= GetPlayerState(PlayerID);
-		specialaction			= GetPlayerSpecialAction(PlayerID);
-		surfingcar				= GetPlayerSurfingVehicleID(PlayerID);
-		onfoot_anim				= GetPlayerAnimationIndex(PlayerID);
-        seatid = GetPlayerVehicleSeat(PlayerID);
-*/
-
-    logprintf("%d player %d idx %d vehicle %d heading %0.5f LOC (%0.5f %0.5f %0.5f) groundz %0.5f VELOC (%0.5f %0.5f %0.5f) CAMPOS (%0.5f %0.5f %0.5f) CAMFRONT (%0.5f %0.5f %0.5f)",
-              datacache[playerid][ aridx ].SnapTime,
-              playerid, aridx,
-              datacache[playerid][ aridx ].vehicleid,
-              datacache[playerid][ aridx ].Heading,
-              datacache[playerid][ aridx ].Position[0], datacache[playerid][ aridx ].Position[1], datacache[playerid][ aridx ].Position[2],
-              datacache[playerid][ aridx ].groundlevel,
-              datacache[playerid][ aridx ].Velocity[0], datacache[playerid][ aridx ].Velocity[1], datacache[playerid][ aridx ].Velocity[2],
-              datacache[playerid][ aridx ].CamPos[0], datacache[playerid][ aridx ].CamPos[1], datacache[playerid][ aridx ].CamPos[2],
-              datacache[playerid][ aridx ].CamFront[0], datacache[playerid][ aridx ].CamFront[1], datacache[playerid][ aridx ].CamFront[2]
-              );
-
-    // increase/cycle counter
-
-    curridx[playerid]++;
-
-    if (curridx[playerid] > 59)
-        curridx[playerid] = 0;
-
-    return true;
 }
 
 float Clamp360(float angle) {
@@ -853,16 +841,6 @@ SCRIPT_NATIVE nat_MPFSQRT(AMX* amx, cell* params) {
 
 }
 
-SCRIPT_NATIVE nat_MPPLogAdd(AMX* amx, cell* params) {
-	int playerid;
-
-    CHECK_PARAM_COUNT(nat_MPPLogAdd, 1);
-
-	playerid = (int)params[1];
-
-	return ACProcessUpdate(playerid);
-}
-
 SCRIPT_NATIVE nat_MPDistancePointLine(AMX* amx, cell* params) {
 
     CHECK_PARAM_COUNT(nat_MPDistancePointLine, 9);
@@ -918,15 +896,17 @@ float IsFltWithin(float a, float b, float value) {
 		maxv = a;
 	}
 
-	//logprintf("from %0.5f to %0.5f value %0.5f ", minv, maxv, value);
+	int res = 0;
 
 	if ((value >= minv) && (value <= maxv))
-		return 1;
+		res = 1;
 
-	return 0;
+//	logprintf("from %0.5f to %0.5f value %0.5f is %d", minv, maxv, value, res);
+
+	return res;
 }
 
-
+/*
 int FltInRange(float a, float b, float value, float ExtraBorder) {
 
 	float minv = a;
@@ -942,16 +922,13 @@ int FltInRange(float a, float b, float value, float ExtraBorder) {
 
 	return 0;
 }
+*/
 
 SCRIPT_NATIVE nat_MPWithinRange(AMX* amx, cell* params) {
 
     CHECK_PARAM_COUNT(nat_MPWithinRange, 3);
 
-	int result;
-
-	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]));
-
-	return amx_ftoc(result);
+	return IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]));
 }
 
 SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params) {
@@ -959,31 +936,28 @@ SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params) {
     CHECK_PARAM_COUNT(nat_MPPtInRect2D, 6);
 
 	int result;
-	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[3]), amx_ctof(params[5]));
-	if (result == 1)
-		result = IsFltWithin(amx_ctof(params[2]), amx_ctof(params[4]), amx_ctof(params[6]));
+	if (IsFltWithin(amx_ctof(params[1]), amx_ctof(params[3]), amx_ctof(params[5])) != 1)
+		return 0;
 
-	return amx_ftoc(result);
+	if (IsFltWithin(amx_ctof(params[2]), amx_ctof(params[4]), amx_ctof(params[6])) != 1)
+		return 0;
+
+	return 1;
 }
 
 SCRIPT_NATIVE nat_MPPtInRect3D(AMX* amx, cell* params) {
 
     CHECK_PARAM_COUNT(nat_MPPtInRect3D, 9);
 
-	int result;
-	result = IsFltWithin(amx_ctof(params[1]), amx_ctof(params[4]), amx_ctof(params[7]));
-	if (result == 1)
-		result = IsFltWithin(amx_ctof(params[2]), amx_ctof(params[5]), amx_ctof(params[8]));
-	if (result == 1)
-		result = IsFltWithin(amx_ctof(params[3]), amx_ctof(params[6]), amx_ctof(params[9]));
+	if (IsFltWithin(amx_ctof(params[1]), amx_ctof(params[4]), amx_ctof(params[7])) != 1)
+		return 0;
 
-	return amx_ftoc(result);
-}
+	if (IsFltWithin(amx_ctof(params[2]), amx_ctof(params[5]), amx_ctof(params[8])) != 1)
+		return 0;
 
+	if (IsFltWithin(amx_ctof(params[3]), amx_ctof(params[6]), amx_ctof(params[9])) != 1)
+		return 0;
 
-SCRIPT_NATIVE nat_MPInit(AMX * amx, cell * params)
-{
-	logprintf("*** Math Plugin: Initialized.");
 	return 1;
 }
 
