@@ -21,38 +21,13 @@
 //									Constants
 // ----------------==========================================--------------- |
 
-#define MAX_SNAPSHOTS 60
 #define camera_actor_range_threshhold 0.75
 #define PI 3.14159265
-
-// ----------------==========================================--------------- |
-//								User defined types
-// ----------------==========================================--------------- |
-
-struct psnapshot {
-
-    unsigned SnapTime;
-
-    float Position[3];
-    float Velocity[3];
-
-    float CamPos[3];
-    float CamFront[3];
-
-    float groundlevel;
-
-    float Heading;
-    uint16_t vehicleid;
-
-};
 
 	/*
 	 * Natives
 	 */
 
-    SCRIPT_NATIVE nat_MPPLogAdd(AMX* amx, cell* params);
-    SCRIPT_NATIVE nat_MPPLogConnect(AMX* amx, cell* params);
-    SCRIPT_NATIVE nat_MPInit(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPGetVehicleDriver(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPGetVehicleDriverCount(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPCrossProduct(AMX* amx, cell* params);
@@ -76,6 +51,7 @@ struct psnapshot {
 	SCRIPT_NATIVE nat_MPGetVehicleOccupantCnt(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPGetVehicleSurfersCnt(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPProjectPointOnPlayer(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPProjectPointXYZA(AMX* amx, cell* params);
 
 	SCRIPT_NATIVE nat_MPWithinRange(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params);
