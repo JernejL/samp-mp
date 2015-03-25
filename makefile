@@ -4,7 +4,7 @@ GPP=g++
 GCC=gcc
 OUTFILE="MathPlugin.so"
 
-COMPILE_FLAGS=-c -m32 -O3 -w -fPIC -DLINUX -include stddef.h -DHAVE_ALLOCA_H -I../../ -I../../../ -I../../include/sampgdk/  -I../../include/sampgdk/amx/  -I../../include/
+COMPILE_FLAGS=-c -m32 -O3 -w -fPIC -DLINUX -include stddef.h -DHAVE_ALLOCA_H -I../../ -I../../../ -I../../include/sampgdk/ -I../../include/sampgdk/amx/  -I../../include/ -I../../src/
 
 all:
 	$(GPP) $(COMPILE_FLAGS) ../../src/*.cpp

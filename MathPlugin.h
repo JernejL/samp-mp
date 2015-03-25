@@ -37,6 +37,10 @@
     SCRIPT_NATIVE nat_MPDistancePointLine(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPGetVehicleUpsideDown(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPDistance(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_returninf(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_returnnan(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_normalizefloat(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPFloatIsFinite(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPVecLength(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_FMPDistance(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPInterpolatePoint(AMX* amx, cell* params);

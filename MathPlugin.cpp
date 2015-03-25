@@ -32,6 +32,12 @@ using namespace sampgdk;
 		{ "MPDistance",					nat_MPDistance },
 		{ "MPFDistance",				nat_MPFDistance },
 		{ "MPFSQRT",					nat_MPFSQRT },
+		{ "MPFloatIsFinite",			nat_MPFloatIsFinite },
+
+		{ "MPReturnInf",				nat_returninf },
+		{ "MPReturnNan",				nat_returnnan },
+		{ "MPFiniteFloat",				nat_normalizefloat },
+
 		{ "MPClamp360",					nat_MPClamp360 },
 		{ "MPFNormalize",				nat_MPFNormalize },
 		{ "MPGetVehicleUpsideDown",		nat_MPGetVehicleUpsideDown },
@@ -482,6 +488,60 @@ SCRIPT_NATIVE nat_MPDistance(AMX* amx, cell* params) {
 	return amx_ftoc(tmpret);
 
 }
+
+SCRIPT_NATIVE nat_MPFloatIsFinite(AMX* amx, cell* params) {
+
+    CHECK_PARAM_COUNT(nat_MPFloatIsFinite, 1);
+
+    float tmpret;
+	tmpret = amx_ctof(params[1]);
+
+	return isfinite(tmpret);
+
+}
+
+
+SCRIPT_NATIVE nat_returninf(AMX* amx, cell* params) {
+	
+	float tmpret;
+	
+	if (params[1] == 1)
+		tmpret = INFINITY;
+	else
+		tmpret = -INFINITY;
+	
+	return amx_ftoc(tmpret);
+	
+}
+
+SCRIPT_NATIVE nat_returnnan(AMX* amx, cell* params) {
+	
+	float tmpret;
+	
+	if (params[1] == 1)
+		tmpret = NAN;
+	else
+		tmpret = -NAN;
+	
+	return amx_ftoc(tmpret);
+	
+}
+
+SCRIPT_NATIVE nat_normalizefloat(AMX* amx, cell* params) {
+	
+	CHECK_PARAM_COUNT(nat_normalizefloat, 2);
+	
+	float tmpret;
+	
+	tmpret = amx_ctof(params[1]);
+	
+	if (!isfinite(tmpret))
+		tmpret = amx_ctof(params[2]);
+	
+	return amx_ftoc(tmpret);
+	
+}
+
 
 SCRIPT_NATIVE nat_MPFDistance(AMX* amx, cell* params) {
 
