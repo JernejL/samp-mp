@@ -1,0 +1,1 @@
+Advanced math routines and utility functions for sa-mp pawn scripters.
