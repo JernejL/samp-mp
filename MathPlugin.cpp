@@ -946,7 +946,7 @@ SCRIPT_NATIVE nat_MPGetVehicleUpsideDown(AMX* amx, cell* params) {
 	return amx_ftoc(resz);
 }
 
-float IsFltWithin(float a, float b, float value) {
+int IsFltWithin(float a, float b, float value) {
 
 	float minv = a;
 	float maxv = b;
