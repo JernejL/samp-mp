@@ -946,7 +946,7 @@ SCRIPT_NATIVE nat_MPGetVehicleUpsideDown(AMX* amx, cell* params) {
 	return amx_ftoc(resz);
 }
 
-float IsFltWithin(float a, float b, float value) {
+bool IsFltWithin(float a, float b, float value) {
 
 	float minv = a;
 	float maxv = b;
@@ -956,14 +956,12 @@ float IsFltWithin(float a, float b, float value) {
 		maxv = a;
 	}
 
-	int res = 0;
-
 	if ((value >= minv) && (value <= maxv))
-		res = 1;
+		return true;
 
 //	logprintf("from %0.5f to %0.5f value %0.5f is %d", minv, maxv, value, res);
 
-	return res;
+	return false;
 }
 
 /*
@@ -988,7 +986,11 @@ SCRIPT_NATIVE nat_MPWithinRange(AMX* amx, cell* params) {
 
     CHECK_PARAM_COUNT(nat_MPWithinRange, 3);
 
-	return IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]));
+	if (IsFltWithin(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3])))
+		return 1;
+	
+	return 0;
+	
 }
 
 SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params) {
