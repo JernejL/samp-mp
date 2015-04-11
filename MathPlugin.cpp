@@ -1,13 +1,9 @@
 #include "MathPlugin.h"
 
 #include <math.h>
-#include <logprintf.h>
-#include <samp.h>
-#include <players.h>
-#include <wrapper.h>
-#include <plugin.h>
-#include <vehicles.h>
-#include <hooknative.h>
+#include <string>
+
+extern void *pAMXFunctions;
 
 using namespace sampgdk;
 
@@ -251,8 +247,8 @@ void ProjectPointOnPlayer(int PlayerID, float incoords_x, float incoords_y, floa
 
 	float playerpos[3];
 	float playerheading;
-	GetPlayerPos(PlayerID, playerpos[0], playerpos[1], playerpos[2]);
-	GetPlayerFacingAngle(PlayerID, playerheading);
+	GetPlayerPos(PlayerID, &playerpos[0], &playerpos[1], &playerpos[2]);
+	GetPlayerFacingAngle(PlayerID, &playerheading);
 
 	float originalangle;
 	originalangle = atan2(incoords_x, incoords_y) * 180 / PI;
@@ -420,7 +416,7 @@ void MPProjectPointOnVehicle(int vehid, float Invector[3], float &resx, float &r
 	float transformationmatrix[4][4];
 
 	// to native!
-	GetVehicleRotationQuat(vehid, Quaternion[0], Quaternion[1], Quaternion[2], Quaternion[3]);
+	GetVehicleRotationQuat(vehid, &Quaternion[0], &Quaternion[1], &Quaternion[2], &Quaternion[3]);
 
 	// build a transformation matrix out of the quaternion
 	float xx = Quaternion[0] * Quaternion[0];
@@ -461,7 +457,7 @@ void MPProjectPointOnVehicle(int vehid, float Invector[3], float &resx, float &r
 	if (worldspace == 1) {
 		float fX, fY, fZ;
 
-		GetVehiclePos(vehid, fX, fY, fZ);
+		GetVehiclePos(vehid, &fX, &fY, &fZ);
 
 		resx += fX;
 		resy += fY;
@@ -697,9 +693,9 @@ int MPGetAimTarget(int playerid, float searchradius) {
 	float ccpos[3];
 	float ccfront[3];
 
-	GetPlayerCameraFrontVector(playerid, ccfront[0], ccfront[1], ccfront[2]);
+	GetPlayerCameraFrontVector(playerid, &ccfront[0], &ccfront[1], &ccfront[2]);
 
-	GetPlayerCameraPos(playerid, ccpos[0], ccpos[1], ccpos[2]);
+	GetPlayerCameraPos(playerid, &ccpos[0], &ccpos[1], &ccpos[2]);
 
 	//logprintf("camera location for %d = (%0.5f %0.5f %0.5f) front (%0.5f %0.5f %0.5f)", playerid, ccpos[0], ccpos[1], ccpos[2], ccfront[0], ccfront[1], ccfront[2]);
 
@@ -717,7 +713,7 @@ int MPGetAimTarget(int playerid, float searchradius) {
 
 		float thiscoords[3];
 
-		GetPlayerPos(i, thiscoords[0], thiscoords[1], thiscoords[2]);
+		GetPlayerPos(i, &thiscoords[0], &thiscoords[1], &thiscoords[2]);
 
 		float dist;
 
@@ -1024,15 +1020,16 @@ SCRIPT_NATIVE nat_MPPtInRect3D(AMX* amx, cell* params) {
 }
 
 PLUGIN_EXPORT unsigned int PLUGIN_CALL Supports()  {
-	return SUPPORTS_VERSION  | SUPPORTS_AMX_NATIVES;
+    return sampgdk::Supports() | SUPPORTS_PROCESS_TICK | SUPPORTS_AMX_NATIVES;
 }
 
-PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppPluginData)  {
-    // This always must be called first
-    Wrapper::GetInstance()->Initialize(ppPluginData);
+PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData) {
+    if (!sampgdk::Load(ppData)) return false;
+
+    pAMXFunctions = ppData[PLUGIN_DATA_AMX_EXPORTS];
+
     logprintf("Math Plugin Loaded.");
-    // Set our gamemode as the main event handler
-    //EventHandler::SetEventHandler(&::theGameMode);
+
     return true;
 }
 
@@ -1041,19 +1038,15 @@ PLUGIN_EXPORT int PLUGIN_CALL AmxLoad( AMX *amx ) {
 }
 
 PLUGIN_EXPORT int PLUGIN_CALL AmxUnload( AMX *amx ) {
-
 	return AMX_ERR_NONE;
 }
 
-PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
-{
+PLUGIN_EXPORT void PLUGIN_CALL Unload() {
+    sampgdk::Unload();
+}
+
+PLUGIN_EXPORT void PLUGIN_CALL ProcessTick() {
     // todo: code that checks if server is laggy / tick not going at a sufficient rate
 
+    sampgdk::ProcessTick();
 }
-
-PLUGIN_EXPORT void PLUGIN_CALL Unload() {
-    return;
-}
-
-
-
