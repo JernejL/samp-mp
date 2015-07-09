@@ -5,6 +5,8 @@
 
 #endif
 
+#define NO_EVENT_HANDLER
+
 #pragma warning (disable:4756) // 4756 = overflow in constant arthimetic (inf / nan needs it)
 #pragma warning (disable:4056) // overflow in floating - point constant arithmetic
 #pragma warning (disable:4244) // conversion from 'double' to 'float', possible loss of data - math uses double for many functions so we turn these warnings off.
@@ -86,7 +88,9 @@
 	SCRIPT_NATIVE nat_BitToOn(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_BitToOff(AMX* amx, cell* params);
 
-	#include <eventhandler.h>
+#ifndef NO_EVENT_HANDLER
+
+	#include <sampgdk/eventhandler.h>
 
 	class samputils : public sampgdk::EventHandler {
 	public:
@@ -115,3 +119,5 @@
 	};
 
 
+
+#endif

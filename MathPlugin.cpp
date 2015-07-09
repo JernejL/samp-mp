@@ -70,6 +70,7 @@ using namespace sampgdk;
 		{ 0,					    	0 }
 	};
 
+	#ifndef NO_EVENT_HANDLER
 
 	static samputils theGameMode;
 
@@ -87,6 +88,8 @@ using namespace sampgdk;
 
 	}
 	*/
+
+	#endif
 
 // i got this from blueg's plugin, no idea who wrote this originally
 std::string GetString(AMX* amx,cell param)
@@ -1217,6 +1220,8 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick() {
     sampgdk::ProcessTick();
 }
 
+#ifndef NO_EVENT_HANDLER
+
 void samputils::OnGameModeInit() {
 	
 	return;
@@ -1361,6 +1366,8 @@ bool samputils::OnPlayerUpdate(int playerid) {
 	return true;
 
 }
+
+#endif
 
 /*
 _re_OnPlayerWeaponDataChanged
