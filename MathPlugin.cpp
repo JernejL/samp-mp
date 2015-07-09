@@ -1,3 +1,4 @@
+#define NO_EVENT_HANDLER
 #include "MathPlugin.h"
 
 #include <math.h>
