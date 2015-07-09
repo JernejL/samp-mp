@@ -91,6 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\eventhandler.cpp" />
     <ClCompile Include="MathPlugin.cpp" />
     <ClCompile Include="sampgdk.c" />
     <ClCompile Include="sdk\amxplugin.cpp" />

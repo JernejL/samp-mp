@@ -5,6 +5,26 @@
 
 #endif
 
+#pragma warning (disable:4756) // 4756 = overflow in constant arthimetic (inf / nan needs it)
+#pragma warning (disable:4056) // overflow in floating - point constant arithmetic
+#pragma warning (disable:4244) // conversion from 'double' to 'float', possible loss of data - math uses double for many functions so we turn these warnings off.
+
+#include "time.h"
+#include "sstream"
+#include "fstream"
+#include "iostream"
+#include "vector"
+#include "queue"
+#include "list"
+#include "string.h"
+#include <limits.h>
+
+#define max_players 1000
+
+#define invalid_time -1
+
+#define TickCount GetTickCount
+
 #define CHECK_PARAM_COUNT(sFunc, nCount) \
 		{ if (params[0] != nCount * sizeof(cell)) { \
 			logprintf ("* ERROR -> PARAMETER-COUNT != " #nCount " (" #sFunc ")."); \
@@ -46,6 +66,7 @@
     SCRIPT_NATIVE nat_MPClamp360(AMX* amx, cell* params);
     SCRIPT_NATIVE nat_MPDotProduct(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPGetTrailerTowingVehicle(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPGetPlayerVehicleOtherDriver(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPVecLength(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPFVecLength(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPFDistance(AMX* amx, cell* params);
@@ -57,3 +78,40 @@
 	SCRIPT_NATIVE nat_MPWithinRange(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPPtInRect3D(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_GetTimeDistance(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_GetPlayerIdleTime(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_GetPlayerTimeSinceUpdate(AMX* amx, cell* params);
+
+	SCRIPT_NATIVE nat_IsBitSet(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_BitToOn(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_BitToOff(AMX* amx, cell* params);
+
+	#include <sampgdk/eventhandler.h>
+
+	class samputils : public sampgdk::EventHandler {
+	public:
+		// track vehicle changes
+		int oldvehicleid[max_players];
+		int oldseatid[max_players];
+		int oldvehiclechangetime[max_players];
+
+		// track animation changes
+		
+		int LastAnimSetTime[max_players];
+		int oldanim[max_players];
+
+		// input handler
+		int oldkeys[max_players];
+		int oldupdown[max_players];
+		int oldleftright[max_players];
+
+		samputils();
+		virtual ~samputils();
+		//virtual int getidletime(int playerid);
+		virtual void OnGameModeInit();
+		virtual bool OnPlayerConnect(int playerid);
+		virtual bool OnPlayerUpdate(int playerid);
+		virtual bool OnPlayerKeyStateChange(int playerid, int newkeys, int oldkeys);
+	};
+
+

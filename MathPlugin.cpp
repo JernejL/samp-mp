@@ -3,32 +3,43 @@
 #include <math.h>
 #include <string>
 
+//#include "source/CScripting.h"
+
+#include <sys/stat.h>
+#include <sys/types.h>
+
+std::list<AMX *> p_Amx;
+void **ppPluginData;
 extern void *pAMXFunctions;
 
-using namespace sampgdk;
+// track activity
+int lastplayerinput[max_players];
+int lastplayerupdate[max_players];
 
+using namespace sampgdk;
 
 	// And an array containing the native function-names and the functions
 	// specified with them.
 	AMX_NATIVE_INFO natives[ ] =
 	{
-		{ "MPGetVehicleDriver",			nat_MPGetVehicleDriver },
-		{ "MPGetVehicleDriverCount",	nat_MPGetVehicleDriverCount },
-		{ "MPGetVehicleOccupantCnt",	nat_MPGetVehicleOccupantCnt },
-		{ "MPGetVehicleSurfersCnt", 	nat_MPGetVehicleSurfersCnt},
-		{ "MPCrossProduct",				nat_MPCrossProduct },
-		{ "MPDotProduct",				nat_MPDotProduct },
-		{ "MPDistanceCameraToLocation",	nat_MPDistanceCameraTargetToLocation },
-		{ "MPProjectPointOnVehicle",	nat_MPProjectPointOnVehicle},
-		{ "MPProjectPointOnPlayer",		nat_MPProjectPointOnPlayer},
-		{ "MPProjectPointXYZA",			nat_MPProjectPointXYZA},
-		{ "MPGetAimTarget",				nat_MPGetAimTarget },
-		{ "MPDistancePointLine",		nat_MPDistancePointLine },
-		{ "MPInterpolatePoint",			nat_MPInterpolatePoint},
-		{ "MPDistance",					nat_MPDistance },
-		{ "MPFDistance",				nat_MPFDistance },
-		{ "MPFSQRT",					nat_MPFSQRT },
-		{ "MPFloatIsFinite",			nat_MPFloatIsFinite },
+		{ "MPGetVehicleDriver",				nat_MPGetVehicleDriver },
+		{ "MPGetVehicleDriverCount",		nat_MPGetVehicleDriverCount },
+		{ "MPGetPlayerVehicleOtherDriver",	nat_MPGetPlayerVehicleOtherDriver },
+		{ "MPGetVehicleOccupantCnt",		nat_MPGetVehicleOccupantCnt },
+		{ "MPGetVehicleSurfersCnt", 		nat_MPGetVehicleSurfersCnt},
+		{ "MPCrossProduct",					nat_MPCrossProduct },
+		{ "MPDotProduct",					nat_MPDotProduct },
+		{ "MPDistanceCameraToLocation",		nat_MPDistanceCameraTargetToLocation },
+		{ "MPProjectPointOnVehicle",		nat_MPProjectPointOnVehicle},
+		{ "MPProjectPointOnPlayer",			nat_MPProjectPointOnPlayer},
+		{ "MPProjectPointXYZA",				nat_MPProjectPointXYZA},
+		{ "MPGetAimTarget",					nat_MPGetAimTarget },
+		{ "MPDistancePointLine",			nat_MPDistancePointLine },
+		{ "MPInterpolatePoint",				nat_MPInterpolatePoint},
+		{ "MPDistance",						nat_MPDistance },
+		{ "MPFDistance",					nat_MPFDistance },
+		{ "MPFSQRT",						nat_MPFSQRT },
+		{ "MPFloatIsFinite",				nat_MPFloatIsFinite },
 
 		{ "MPReturnInf",				nat_returninf },
 		{ "MPReturnNan",				nat_returnnan },
@@ -44,9 +55,38 @@ using namespace sampgdk;
 		{ "MPInRange",					nat_MPWithinRange },
 		{ "MPPtInRect2D",				nat_MPPtInRect2D },
 		{ "MPPtInRect3D",				nat_MPPtInRect3D },
+		
+		{ "IsBitSet", nat_IsBitSet },
+		{ "BitToOn", nat_BitToOn },
+		{ "BitToOff", nat_BitToOff },
+
+		{ "UtilGetPlayerIdleTime", nat_GetPlayerIdleTime },
+		{ "UtilGetPlayerAbsentTime", nat_GetPlayerTimeSinceUpdate },
+		
+
+		// ticks related
+		{ "GetTimeDistance",			nat_GetTimeDistance },
 
 		{ 0,					    	0 }
 	};
+
+
+	static samputils theGameMode;
+
+	samputils::samputils() {
+		// Register our gamemode in order to catch events - if we don't do this
+		// somewhere none of the HelloWorld callbacks will be ever called.
+		this->Register();
+	}
+
+	samputils::~samputils() {}
+	/*
+	int samputils::getidletime(int playerid) {
+
+		return samputils::lastplayerinput[playerid];
+
+	}
+	*/
 
 // i got this from blueg's plugin, no idea who wrote this originally
 std::string GetString(AMX* amx,cell param)
@@ -98,6 +138,36 @@ void Normalize(float &vx, float &vy, float &vz) {
 	vx = vx * Length;
 	vy = vy * Length;
 	vz = vz * Length;
+}
+
+int GetPlayerVehicleOtherDriver(int playerid) {
+
+	if (playerid == INVALID_PLAYER_ID)
+		return INVALID_PLAYER_ID;
+
+	int vehicleid = GetPlayerVehicleID(playerid);
+
+	if ((!IsValidVehicle(vehicleid)) || (vehicleid == 0) || (vehicleid == INVALID_VEHICLE_ID) || (vehicleid > MAX_VEHICLES))
+		return INVALID_PLAYER_ID; // not possible to find any vehicle, so there is no "other" driver.
+
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++) {
+
+		if ((IsPlayerConnected(i) == false) || (playerid == i)) // no connected player in slot or this is same player?
+			continue;
+
+		if (GetPlayerState(i) != PLAYER_STATE_DRIVER) continue; // not a driver of any vehicle?
+
+		int thisplayervehid = GetPlayerVehicleID(i);
+
+		// todo: maybe use IsPlayerInVehicle instead.
+
+		if (thisplayervehid == vehicleid) // found a connected driver in this car.
+			return i;
+
+	}
+
 }
 
 int GetTrailerTowingVehicle(int trailerid) {
@@ -169,6 +239,16 @@ SCRIPT_NATIVE nat_MPGetTrailerTowingVehicle(AMX* amx, cell* params) {
 	return GetTrailerTowingVehicle(vehicleid);
 }
 
+SCRIPT_NATIVE nat_MPGetPlayerVehicleOtherDriver(AMX* amx, cell* params) {
+	int playerid;
+
+	CHECK_PARAM_COUNT(nat_MPGetPlayerVehicleOtherDriver, 1);
+
+	playerid = (int)params[1];
+
+	return GetPlayerVehicleOtherDriver(playerid);
+}
+
 int GetVehicleDriverCount(int vehicleid) {
 
     if ((vehicleid == 0) || (vehicleid == INVALID_VEHICLE_ID) || (vehicleid > MAX_VEHICLES))
@@ -229,7 +309,7 @@ void ProjectPointXYZA(
 				float incoords_x, float incoords_y, float incoords_z, float &outx, float &outy, float &outz) {
 
 	float originalangle;
-	originalangle = atan2(incoords_x, incoords_y) * 180 / PI;
+	originalangle = atan2(incoords_x, incoords_y) * 180.0 / PI;
 
 	float originaldistance;
 	originaldistance = FastSqrt(incoords_x * incoords_x + incoords_y * incoords_y);
@@ -237,8 +317,8 @@ void ProjectPointXYZA(
 	originalangle -= playerheading;
 
 	// *PI/180 = degtorad
-	outx = origin_x + sin(originalangle * PI/180) * originaldistance;
-	outy = origin_y + cos(originalangle * PI/180) * originaldistance;
+	outx = origin_x + sin(originalangle * PI/180.0) * originaldistance;
+	outy = origin_y + cos(originalangle * PI/180.0) * originaldistance;
 	outz = incoords_z + origin_z; // nothing magical on Z!
 
 }
@@ -960,6 +1040,65 @@ bool IsFltWithin(float a, float b, float value) {
 	return false;
 }
 
+int Distance1Dint(int fPos1, int fPos2) {
+
+	if (fPos1 > fPos2)
+		return abs(fPos1 - fPos2);
+
+	return abs(fPos2 - fPos1);
+
+}
+
+// This function manages to properly calculate time even if the timers wrap around and underflow.
+int GetTimeDistance(int a, int b) {
+
+	// a pawn cell is signed 32-bit integer.
+	// -2147483648 to 2147483647
+
+	// todo: handle invalid_time, if any time is invalid, it should return infinite time (2147483647)
+
+	if ((a < 0) && (b > 0)) {
+
+		int dist = Distance1Dint(a, b);
+		if (dist > 2147483647)
+			return Distance1Dint(a - 2147483647, b - 2147483647);
+		else
+			return dist;
+
+	}
+	else {
+
+		return Distance1Dint(a, b);
+
+	}
+
+}
+
+SCRIPT_NATIVE nat_GetPlayerIdleTime(AMX* amx, cell* params) {
+
+	CHECK_PARAM_COUNT(nat_GetPlayerIdleTime, 1);
+	
+	return GetTimeDistance(TickCount(), lastplayerinput[params[1]]);
+
+}
+
+SCRIPT_NATIVE nat_GetPlayerTimeSinceUpdate(AMX* amx, cell* params) {
+
+	CHECK_PARAM_COUNT(nat_GetPlayerTimeSinceUpdate, 1);
+
+	return GetTimeDistance(TickCount(), lastplayerupdate[params[1]]);
+
+}
+
+SCRIPT_NATIVE nat_GetTimeDistance(AMX* amx, cell* params) {
+
+	CHECK_PARAM_COUNT(nat_GetTimeDistance, 2);
+
+	return GetTimeDistance(params[1], params[2]);
+
+}
+
+
 /*
 int FltInRange(float a, float b, float value, float ExtraBorder) {
 
@@ -993,7 +1132,6 @@ SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params) {
 
     CHECK_PARAM_COUNT(nat_MPPtInRect2D, 6);
 
-	int result;
 	if (IsFltWithin(amx_ctof(params[1]), amx_ctof(params[3]), amx_ctof(params[5])) != 1)
 		return 0;
 
@@ -1019,6 +1157,32 @@ SCRIPT_NATIVE nat_MPPtInRect3D(AMX* amx, cell* params) {
 	return 1;
 }
 
+
+SCRIPT_NATIVE nat_IsBitSet(AMX* amx, cell* params) {
+
+	//	returns True if a bit is ON (1)
+	//	Nth can have any bit order value in [0..31]
+
+	return (params[1] & (1 << params[2])) != 0;
+
+}
+
+// sets a bit in number to on and returns new number
+
+SCRIPT_NATIVE nat_BitToOn(AMX* amx, cell* params) {
+
+	return params[1] | (1 << params[2]);
+
+}
+
+// sets a bit in number to off and returns new number
+SCRIPT_NATIVE nat_BitToOff(AMX* amx, cell* params) {
+	
+	return params[1] & ((1 << params[2]) ^ 0xFFFFFFFF);
+
+}
+
+
 PLUGIN_EXPORT unsigned int PLUGIN_CALL Supports()  {
     return sampgdk::Supports() | SUPPORTS_PROCESS_TICK | SUPPORTS_AMX_NATIVES;
 }
@@ -1034,6 +1198,7 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData) {
 }
 
 PLUGIN_EXPORT int PLUGIN_CALL AmxLoad( AMX *amx ) {
+	p_Amx.push_back(amx);
 	return amx_Register( amx, natives, -1 );
 }
 
@@ -1042,6 +1207,7 @@ PLUGIN_EXPORT int PLUGIN_CALL AmxUnload( AMX *amx ) {
 }
 
 PLUGIN_EXPORT void PLUGIN_CALL Unload() {
+	p_Amx.clear();
     sampgdk::Unload();
 }
 
@@ -1050,3 +1216,171 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick() {
 
     sampgdk::ProcessTick();
 }
+
+void samputils::OnGameModeInit() {
+	
+	return;
+
+}
+
+bool samputils::OnPlayerConnect(int playerid) {
+
+	samputils::oldanim[playerid] = 0;
+
+	samputils::LastAnimSetTime[playerid] = invalid_time;
+	samputils::oldvehiclechangetime[playerid] = invalid_time;
+	lastplayerinput[playerid] = invalid_time;
+	lastplayerupdate[playerid] = invalid_time;
+
+	return true;
+
+}
+
+bool samputils::OnPlayerKeyStateChange(int playerid, int newkeys, int oldkeys) {
+
+	lastplayerinput[playerid] = TickCount();
+	lastplayerupdate[playerid] = TickCount();
+
+	return true;
+
+}
+
+bool samputils::OnPlayerUpdate(int playerid) {
+
+	lastplayerupdate[playerid] = TickCount();
+
+	// todo: OnPlayerVirtualWorldChange
+	// todo: onplayerteamidchange
+	// can i do these via hooking natives?
+
+	int ckeys, cud, clr;
+
+	GetPlayerKeys(playerid, &ckeys, &cud, &clr);
+
+	// todo: detect camera upvector change and take it as input change.
+
+	if ((samputils::oldkeys[playerid] != ckeys) || (samputils::oldupdown[max_players] = cud) || (samputils::oldleftright[max_players] = clr)) {
+		
+		lastplayerinput[playerid] = TickCount();
+
+		cell amx_Ret;
+		int amx_Idx;
+
+		for (std::list<AMX *>::iterator amxe = p_Amx.begin(); amxe != p_Amx.end(); amxe++) {
+			if (amx_FindPublic(*amxe, "OnPlayerAnalogInput", &amx_Idx) == AMX_ERR_NONE) {
+
+				amx_Push(*amxe, playerid);
+				amx_Push(*amxe, samputils::oldkeys[playerid]);
+				amx_Push(*amxe, samputils::oldupdown[playerid]);
+				amx_Push(*amxe, samputils::oldleftright[playerid]);
+
+				amx_Push(*amxe, ckeys);
+				amx_Push(*amxe, cud);
+				amx_Push(*amxe, clr);
+
+				amx_Exec(*amxe, &amx_Ret, amx_Idx);
+
+			}
+		}
+
+	}
+
+	samputils::oldkeys[playerid] = ckeys;
+	samputils::oldupdown[max_players] = cud;
+	samputils::oldleftright[max_players] = clr;
+
+	int currentanim = GetPlayerAnimationIndex(playerid);
+
+	// animations tracker
+	if (samputils::oldanim[playerid] != currentanim) {
+
+		cell amx_Ret;
+		int amx_Idx;
+
+		for (std::list<AMX *>::iterator amxe = p_Amx.begin(); amxe != p_Amx.end(); amxe++) {
+			if (amx_FindPublic(*amxe, "OnPlayerAnimationChanged", &amx_Idx) == AMX_ERR_NONE) {
+
+				amx_Push(*amxe, playerid);
+				amx_Push(*amxe, samputils::oldanim[playerid]);
+				amx_Push(*amxe, currentanim);
+				amx_Push(*amxe, samputils::oldanim[playerid] == 0 ? 0 : GetTimeDistance(TickCount(), samputils::LastAnimSetTime[playerid]));
+				amx_Exec(*amxe, &amx_Ret, amx_Idx);
+				
+			}
+		}
+
+		samputils::oldanim[playerid] = currentanim;
+		samputils::LastAnimSetTime[playerid] = TickCount();
+
+	}
+
+	int cvehid = GetPlayerVehicleID(playerid);
+	int cvehseat = GetPlayerVehicleSeat(playerid);
+
+	if ((cvehid != samputils::oldvehicleid[playerid]) || (cvehseat != samputils::oldseatid[playerid])) {
+
+		int changecode = 0;
+
+		if ((cvehid == INVALID_VEHICLE_ID) && (samputils::oldvehicleid[playerid] != INVALID_VEHICLE_ID))
+			changecode = -1; // exited vehicle
+
+		if ((cvehid != INVALID_VEHICLE_ID) && (samputils::oldvehicleid[playerid] == INVALID_VEHICLE_ID))
+			changecode = 1; // entered vehicle
+
+		if ((cvehid != INVALID_VEHICLE_ID) && (samputils::oldvehicleid[playerid] != INVALID_VEHICLE_ID)) {
+			if (cvehid != samputils::oldvehicleid[playerid])
+				changecode = 2; // changed vehicle-to-vehicle
+			else
+				changecode = 3; // changed vehicle seat
+		}
+
+		cell amx_Ret;
+		int amx_Idx;
+
+		for (std::list<AMX *>::iterator amxe = p_Amx.begin(); amxe != p_Amx.end(); amxe++) {
+			if (amx_FindPublic(*amxe, "OnPlayerVehicleInfoChanged", &amx_Idx) == AMX_ERR_NONE) {
+
+				amx_Push(*amxe, playerid);
+				amx_Push(*amxe, oldvehicleid[playerid]);
+				amx_Push(*amxe, oldseatid[playerid]);
+				amx_Push(*amxe, cvehid);
+				amx_Push(*amxe, cvehseat);
+				amx_Push(*amxe, GetTimeDistance(TickCount(), samputils::oldvehiclechangetime[playerid]));
+				amx_Push(*amxe, changecode);
+				amx_Exec(*amxe, &amx_Ret, amx_Idx);
+
+			}
+		}
+
+	}
+
+	samputils::oldvehicleid[playerid] = cvehid;
+	samputils::oldseatid[playerid] = cvehseat;
+	samputils::oldvehiclechangetime[playerid] = TickCount();
+
+	return true;
+
+}
+
+/*
+_re_OnPlayerWeaponDataChanged
+_re_OnPlayerVirtualWorldChange
+
+can ide add vehicle mod
+can cab attach as traIler(ide.a ide.b)
+time when vehicle was entered(time of last vehicle - id change)
+
+used for vehicle id change AND seat id change
+_re_OnPlayerVehicleIDChanged / OnPlayerVehicleInfoChanged(entered / exited / switch - id / changed_seat, oldvehicleid newvehicleid, oldseatid, seatid, newvehicledrivers)
+
+_re_OnPlayerVehicleDamaged
+_re_OnPlayerChangedTeam
+_re_OnClientPlayerMoneyChanged
+_re_OnVehicleDamageStatusUpdate ? ? ?
+_re_OnVehicleLightsChanged
+_re_OnVehicleHealthIncrease
+_re_OnPlayerSActionChange
+_re_OnPlayerMoneyCheckNotify
+_re_OnPlayerWeaponChanged
+_re_OnPlayerStuntMoney ? ?
+*/
