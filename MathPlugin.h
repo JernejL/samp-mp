@@ -86,7 +86,7 @@
 	SCRIPT_NATIVE nat_BitToOn(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_BitToOff(AMX* amx, cell* params);
 
-	#include <sampgdk/eventhandler.h>
+	#include <eventhandler.h>
 
 	class samputils : public sampgdk::EventHandler {
 	public:
