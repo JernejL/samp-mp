@@ -81,6 +81,7 @@
 	SCRIPT_NATIVE nat_MPPtInRect2D(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPPtInRect3D(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_GetTimeDistance(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_GetTimeMs(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_GetPlayerIdleTime(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_GetPlayerTimeSinceUpdate(AMX* amx, cell* params);
 

@@ -67,6 +67,7 @@ using namespace sampgdk;
 
 		// ticks related
 		{ "GetTimeDistance",			nat_GetTimeDistance },
+		{ "GetTimeMs",					nat_GetTimeMs },
 
 		{ 0,					    	0 }
 	};
@@ -1061,7 +1062,11 @@ int GetTimeDistance(int a, int b) {
 	// a pawn cell is signed 32-bit integer.
 	// -2147483648 to 2147483647
 
-	// todo: handle invalid_time, if any time is invalid, it should return infinite time (2147483647)
+	// handle invalid time. If any time is invalid (zero) then it returns infinite time (2147483647)
+
+	if ((a == 0) || (b == 0)) {
+		return 2147483647;
+	}
 
 	if ((a < 0) && (b > 0)) {
 
@@ -1071,8 +1076,7 @@ int GetTimeDistance(int a, int b) {
 		else
 			return dist;
 
-	}
-	else {
+	} else {
 
 		return Distance1Dint(a, b);
 
@@ -1095,6 +1099,18 @@ SCRIPT_NATIVE nat_GetPlayerTimeSinceUpdate(AMX* amx, cell* params) {
 	return GetTimeDistance(TickCount(), lastplayerupdate[params[1]]);
 
 }
+
+SCRIPT_NATIVE nat_GetTimeMs(AMX* amx, cell* params) {
+
+	int timex = GetTickCount(); // uptime of server in miliseconds
+
+	if (timex == 0)
+		return 1; // never return 0, 0 for us means not initialized / no data.
+
+	return timex;
+
+}
+
 
 SCRIPT_NATIVE nat_GetTimeDistance(AMX* amx, cell* params) {
 
@@ -1360,11 +1376,12 @@ bool samputils::OnPlayerUpdate(int playerid) {
 			}
 		}
 
+		samputils::oldvehiclechangetime[playerid] = TickCount();
+
 	}
 
 	samputils::oldvehicleid[playerid] = cvehid;
 	samputils::oldseatid[playerid] = cvehseat;
-	samputils::oldvehiclechangetime[playerid] = TickCount();
 
 	return true;
 
