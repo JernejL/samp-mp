@@ -172,6 +172,8 @@ int GetPlayerVehicleOtherDriver(int playerid) {
 
 	}
 
+	return INVALID_PLAYER_ID;
+
 }
 
 int GetTrailerTowingVehicle(int trailerid) {
