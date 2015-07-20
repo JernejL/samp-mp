@@ -5,7 +5,7 @@
 
 #endif
 
-#define NO_EVENT_HANDLER
+//#define NO_EVENT_HANDLER
 
 #pragma warning (disable:4756) // 4756 = overflow in constant arthimetic (inf / nan needs it)
 #pragma warning (disable:4056) // overflow in floating - point constant arithmetic

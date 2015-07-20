@@ -1,4 +1,4 @@
-#define NO_EVENT_HANDLER
+//#define NO_EVENT_HANDLER
 #include "MathPlugin.h"
 
 #include <math.h>
@@ -66,7 +66,7 @@ using namespace sampgdk;
 		
 
 		// ticks related
-		{ "GetTimeDistance",			nat_GetTimeDistance },
+		{ "GetTimeDistanceMs",			nat_GetTimeDistance },
 		{ "GetTimeMs",					nat_GetTimeMs },
 
 		{ 0,					    	0 }
@@ -166,6 +166,9 @@ int GetPlayerVehicleOtherDriver(int playerid) {
 
 		int thisplayervehid = GetPlayerVehicleID(i);
 
+		if (!IsVehicleStreamedIn(thisplayervehid, i)) // so players who are in wrong virtual world (like a pause sysstem would do) are not returned as drivers anymore.
+			continue;
+
 		// todo: maybe use IsPlayerInVehicle instead.
 
 		if (thisplayervehid == vehicleid) // found a connected driver in this car.
@@ -212,8 +215,10 @@ int GetVehicleDriver(int vehicleid) {
 
             if (GetPlayerState(i) != PLAYER_STATE_DRIVER) continue; // not a driver of any vehicle?
 
-            int thisplayervehid;
-            thisplayervehid = GetPlayerVehicleID(i);
+            int thisplayervehid = GetPlayerVehicleID(i);
+
+			if (!IsVehicleStreamedIn(thisplayervehid, i)) // so players who are in wrong virtual world (like a pause sysstem would do) are not returned as drivers anymore.
+				continue;
 
             // todo: maybe use IsPlayerInVehicle instead.
 
@@ -271,8 +276,10 @@ int GetVehicleDriverCount(int vehicleid) {
 
             if (GetPlayerState(i) != PLAYER_STATE_DRIVER) continue; // not a driver of any vehicle?
 
-            int thisplayervehid;
-            thisplayervehid = GetPlayerVehicleID(i);
+            int thisplayervehid = GetPlayerVehicleID(i);
+
+			if (!IsVehicleStreamedIn(thisplayervehid, i)) // so players who are in wrong virtual world (like a pause sysstem would do) are not returned as drivers anymore.
+				continue;
 
             if (thisplayervehid == vehicleid) // found a connected driver in this car.
                 totaldrivers++;
@@ -299,8 +306,10 @@ int GetVehicleOccupantCnt(int vehicleid) {
 			if (GetPlayerVirtualWorld(i) != GetVehicleVirtualWorld(vehicleid)) // solves specific issues if you put paused players into separate virtual world.
 				continue;
 
-            int thisplayervehid;
-            thisplayervehid = GetPlayerVehicleID(i);
+            int thisplayervehid = GetPlayerVehicleID(i);
+
+			if (!IsVehicleStreamedIn(thisplayervehid, i)) // so players who are in wrong virtual world (like a pause sysstem would do) are not returned as drivers anymore.
+				continue;
 
             if (thisplayervehid == vehicleid) // found a connected player in this car.
                 totalocc++;
