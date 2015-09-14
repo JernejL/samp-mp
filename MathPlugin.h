@@ -27,6 +27,23 @@
 
 #define TickCount GetTickCount
 
+struct WaterDataTriQuad {
+	float zlevel;
+	float pointmin[2];
+	float pointmax[2];
+
+	float pointa[2];
+	float pointb[2];
+	float pointc[2];
+
+};
+
+struct WaterDataQuad {
+	float zlevel;
+	float pointmin[2];
+	float pointmax[2];
+};
+
 #define CHECK_PARAM_COUNT(sFunc, nCount) \
 		{ if (params[0] != nCount * sizeof(cell)) { \
 			logprintf ("* ERROR -> PARAMETER-COUNT != " #nCount " (" #sFunc ")."); \
@@ -88,6 +105,8 @@
 	SCRIPT_NATIVE nat_IsBitSet(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_BitToOn(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_BitToOff(AMX* amx, cell* params);
+
+	SCRIPT_NATIVE nat_UtilGetWaterZlevel(AMX* amx, cell* params);
 
 #ifndef NO_EVENT_HANDLER
 
