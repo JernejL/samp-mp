@@ -90,6 +90,7 @@ struct WaterDataQuad {
 	SCRIPT_NATIVE nat_MPFVecLength(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPFDistance(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPGetVehicleOccupantCnt(AMX* amx, cell* params);
+	SCRIPT_NATIVE nat_MPGetVehicleNonDriverTeamOccupants(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPGetVehicleSurfersCnt(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPProjectPointOnPlayer(AMX* amx, cell* params);
 	SCRIPT_NATIVE nat_MPProjectPointXYZA(AMX* amx, cell* params);

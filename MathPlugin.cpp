@@ -340,6 +340,7 @@ using namespace sampgdk;
 		{ "MPGetVehicleDriverCount",		nat_MPGetVehicleDriverCount },
 		{ "MPGetPlayerVehicleOtherDriver",	nat_MPGetPlayerVehicleOtherDriver },
 		{ "MPGetVehicleOccupantCnt",		nat_MPGetVehicleOccupantCnt },
+		{ "MPGetVehicleOccupantOtherTeam",	nat_MPGetVehicleNonDriverTeamOccupants },
 		{ "MPGetVehicleSurfersCnt", 		nat_MPGetVehicleSurfersCnt},
 		{ "MPCrossProduct",					nat_MPCrossProduct },
 		{ "MPDotProduct",					nat_MPDotProduct },
@@ -713,6 +714,56 @@ SCRIPT_NATIVE nat_MPGetVehicleDriverCount(AMX* amx, cell* params) {
 
 	return GetVehicleDriverCount(vehicleid);
 }
+
+int GetVehicleOccupantEnemyTeam(int vehicleid) {
+
+	if ((vehicleid == 0) || (vehicleid == INVALID_VEHICLE_ID) || (vehicleid > MAX_VEHICLES))
+		return INVALID_PLAYER_ID;
+
+	int i;
+	int totalocc = 0;
+
+	int cardriver = GetVehicleDriver(vehicleid);
+
+	if (cardriver == INVALID_PLAYER_ID)
+		return INVALID_PLAYER_ID; // no driver - no enemy drivers.
+
+	for (i = 0; i < MAX_PLAYERS; i++) {
+
+		if (IsPlayerConnected(i) == false) // no connected player in slot?
+			continue;
+
+		if (GetPlayerVirtualWorld(i) != GetVehicleVirtualWorld(vehicleid)) // solves specific issues if you put paused players into separate virtual world.
+			continue;
+
+		int thisplayervehid = GetPlayerVehicleID(i);
+
+		if (!IsVehicleStreamedIn(thisplayervehid, i)) // so players who are in wrong virtual world (like a pause sysstem would do) are not returned as drivers anymore.
+			continue;
+
+		if (GetPlayerTeam(i) == GetPlayerTeam(cardriver)) // same team.. this one is ok.
+			continue;
+
+		if (thisplayervehid == vehicleid) // found a connected player in this car.
+			return i;
+
+	}
+
+	return INVALID_PLAYER_ID; // return first enemy player found
+
+}
+
+SCRIPT_NATIVE nat_MPGetVehicleNonDriverTeamOccupants(AMX* amx, cell* params) {
+	
+	int vehicleid;
+
+	CHECK_PARAM_COUNT(nat_MPGetVehicleNonDriverTeamOccupants, 1);
+
+	vehicleid = (int)params[1];
+
+	return GetVehicleOccupantEnemyTeam(vehicleid);
+}
+
 
 SCRIPT_NATIVE nat_MPGetVehicleOccupantCnt(AMX* amx, cell* params) {
 	int vehicleid;
